@@ -1,0 +1,50 @@
+@import './BaseVariables.css';
+
+h1, h2, h3, h4, h5, p, label {
+    color: var(--text-color);
+    font-family: var(--font);
+}
+
+.header {
+    background: var(--header-background);
+    color: var(--text-color);
+    width: 100%;
+    padding: var(--padding);
+    top: 0;
+    left:0;
+    right:0;
+    position: fixed;
+    margin-bottom:10px;
+    z-index: 1;
+}
+
+
+.flex-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: var(--margin);
+    padding: var(--padding);
+
+}
+
+.flex-item {
+    position: relative;
+    margin: var(--margin);
+    padding: var(--padding);
+}
+
+.header-link {
+    text-decoration: none;
+    color: var(--text-color);
+    top:100%;
+
+}
+
+
+.header-link:hover {
+    cursor: pointer;
+    color:var(--color-hover);
+}
+
+  

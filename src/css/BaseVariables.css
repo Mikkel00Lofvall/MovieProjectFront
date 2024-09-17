@@ -1,0 +1,15 @@
+:root {
+    --text-color:#ffffff;
+    --background: #3f403d;
+    --header-background: linear-gradient(to bottom, black, red);
+    --padding:5px;
+    --margin:5px;
+    --color-light-red: rgb(248, 6, 6);
+    --color-red: rgb(169, 0, 0);
+    --color-black:rgba(2,0,36,1);
+    --color-hover:rgb(136, 136, 136);
+    --font:Arial, sans-serif;
+}
+
+
+  

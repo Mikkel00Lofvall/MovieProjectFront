@@ -1,0 +1,183 @@
+@import './BaseVariables.css';
+
+.flex-box-home-page {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center items horizontally */
+    position: relative; /* Ensure the children are positioned relative to this container */
+    width: 100%;
+    height: 100%;
+    height: 100vh;
+}
+
+.right-curtain {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    background: url('../images/right-curtain-trans.png') no-repeat;
+    background-size: cover;
+    width: 20%;
+    z-index: 2;
+}
+
+.left-curtain {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: url('../images/left-curtain-trans.png') no-repeat;
+    background-size: cover;
+    width: 20%;
+    z-index: 2;
+}
+
+.content-container {
+    top:10%;
+    position: relative;
+    width: 60%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.movies-container {
+    width: 100%;
+    height: 100%;
+    overflow-y:scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 1;
+}
+
+.movies-container-flex-box {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.scroll-button-bundle {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: transparent;
+    margin: var(--margin);
+}
+
+.scroll-button-up {
+    pointer-events: auto;
+    z-index: 9999;
+
+    background-color: transparent;
+    border: transparent;
+}
+
+.scroll-button-up::before {
+    content: "▲";
+    font-size: 40px;
+    color:var(--text-color);
+}
+
+.scroll-button-up:hover {
+    cursor:pointer;
+    color:var(--color-hover);
+}
+
+
+.scroll-button-down {
+    pointer-events: auto;
+    z-index: 9999;
+    background-color: transparent;
+    border: transparent;
+}
+
+.scroll-button-down::before {
+    content: "▼";
+    font-size: 40px;
+    color:var(--text-color);
+}
+
+.scroll-button-down:hover {
+    cursor:pointer;
+    color:var(--color-hover);
+}
+
+
+::-webkit-scrollbar {
+    background: transparent;
+    width: 0;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+.movie-box {
+    margin:var(--margin);
+    position: relative;
+}
+
+.movie-box:hover .movie-box-name {
+    text-decoration: underline;
+
+}
+
+.movie-image {
+    width: 150px;
+    height: 250px;
+    transition: opacity 0.3s ease;
+}
+
+.movie-box:hover .movie-image {
+    opacity: 0.5;
+}
+
+.movie-desc-box {
+    border:solid black 2px; 
+    transition: background-color 0.3s ease;
+}
+
+
+
+.movie-box-name {
+    text-decoration: none;
+    font-size: large;
+    padding: var(--padding);
+    margin: var(--margin);
+    transition: text-decoration 0.3s ease;
+}
+
+
+
+.movie-button-bundle {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.movie-box-button {
+    border-radius: 25px;
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--color-light-red);
+    margin:var(--margin);
+    padding:var(--padding);
+}
+
+.movie-box-button:hover {
+    background-color:var(--color-red);
+    cursor: pointer;
+}
+
+.movie-button-bundle-link {
+    text-decoration: none;
+    color: var(--text-color);
+    top:100%;
+}
