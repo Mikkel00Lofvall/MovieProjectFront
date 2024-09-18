@@ -8,10 +8,10 @@ const ReadMorePage = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true); 
 
-    /*useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
             try {
-                let response = await fetch(`https://api.example.com/data/${id}`);
+                let response = await fetch(`https://localhost:7296/api/Movie/GetMovieWithId/${id}`);
                 if (!response) {
                     throw new Error("Network was not okay!")
                 }
@@ -28,7 +28,7 @@ const ReadMorePage = () => {
     }, [id]);
 
     if (loading) return (<h2>Loading</h2>);
-    if (error) return (<h2>Error</h2>);*/
+    if (error) return (<h2>Error</h2>);
 
     return (
         <div>
