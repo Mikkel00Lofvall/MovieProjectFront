@@ -3,152 +3,32 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-    var movies = [
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        },
-        {
-            "id":1,
-            "name":"Hello",
-            "date":"2.3.2004",
-            "imageUrl": "https://picsum.photos/150/250"
-        }, 
-        {
-            "id":2,
-            "name":"World",
-            "date":"12.20.2003",
-            "imageUrl": "https://picsum.photos/150/250"
-        }
-    ];
-    function GetMovie() {
-        const [imageUrl, setImageUrl] = useState(null);
+    let [loading, setLoading] = useState(true); 
+    let [movies, setData] = useState([]);
 
-        useEffect(() => {
-            fetch('https://picsum.photos/800/450')
-                .then(response => {
-                    setImageUrl(response.url);
-                })
-                .catch(error => console.error(error));
-        }, []);
-        return imageUrl
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let response = await fetch(`https://localhost:7296/api/Movie/GetMovies`);
+                if (!response) {
+                    throw new Error("Network was not okay!")
+                }
+                let result = await response.json()
+                for (let i = 0; i < result.length; i++) {
+                    result[i].frontPageImage = Base64ToURL(result[i].frontPageImage.data)  
+                }
+
+                setData(result)
+                console.log(result)
+            } catch (err) {
+                throw new Error(err)
+            } finally {
+                setLoading(false)
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const MovieContainerRef = React.useRef(null);
 
@@ -170,17 +50,29 @@ const HomePage = () => {
         }
     };
 
+    function Base64ToURL(base64) {
+        let byteString = atob(base64)
+        let byteArray  = new Uint8Array(byteString.length)
+
+        for (let i = 0; i < byteString.length; i++) {
+            byteArray[i] = byteString.charCodeAt(i);
+        }
+        let blob = new Blob([byteArray], { type: "application/octect-stream" })
+        let url = URL.createObjectURL(blob);
+        return url;
+    }
+
     let moviesShownList = movies.map(function(movie) {
         return ( 
-            <section className="movie-box" key={movie.id}>
-                <img className="movie-image" src={movie.imageUrl} alt={movie.name} />
+            <section className="movie-box" key={movie.key}>
+                <img className="movie-image" src={movie.frontPageImage} alt={movie.name} />
                 <div className="movie-desc-box">
-                    <label className="movie-box-name">{movie.name}</label>
-                    <label>{movie.date}</label>
+                    <h3 className="movie-box-name">{movie.name}</h3>
+                    <h3 className="movie-box-date">{movie.date}</h3>
                     <div className="movie-button-bundle">
                         <div className="movie-box-button">
                             <nav>
-                                <Link to={`/read-more/${movie.id}`} className="movie-button-bundle-link">Read More</Link>
+                                <Link to={`/read-more/${movie.key}`} className="movie-button-bundle-link">Read More</Link>
                             </nav>
                         </div>
                         <div className="movie-box-button">
@@ -193,6 +85,12 @@ const HomePage = () => {
             </section>
         );
     });
+
+    if (loading) return (
+        <div>
+            <label>Loading</label>
+        </div>
+    );
 
     return (
         <div className="home-page-body">

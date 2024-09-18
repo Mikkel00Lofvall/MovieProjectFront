@@ -119,8 +119,15 @@
 
 
 .movie-box {
-    margin:var(--margin);
+    max-width: 240px;
+    min-width: 240px;
+    max-height: 500px;
+    margin:30px;
     position: relative;
+    background-color: var(--background);
+    border-radius: 0px 0px 25px 25px;
+    border: solid black 2px;
+    box-shadow: 0px 0px 10px 10px #000000;
 }
 
 .movie-box:hover .movie-box-name {
@@ -128,10 +135,21 @@
 
 }
 
+.movie-box-name {
+    padding: var(--padding);
+    margin: var(--margin);
+}
+
+.movie-box-date {
+    padding: var(--padding);
+    margin: var(--margin);
+}
+
 .movie-image {
-    width: 150px;
-    height: 250px;
+    width:100%;
+    height: 70%;
     transition: opacity 0.3s ease;
+    object-fit: cover;
 }
 
 .movie-box:hover .movie-image {
@@ -139,8 +157,8 @@
 }
 
 .movie-desc-box {
-    border:solid black 2px; 
     transition: background-color 0.3s ease;
+    margin: 0px var(--margin) 0px var(--margin);
 }
 
 
@@ -160,6 +178,8 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin: var(--margin);
+    padding: var(--padding);
 }
 
 .movie-box-button {
