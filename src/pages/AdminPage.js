@@ -5,11 +5,12 @@ const AdminPage = () => {
     let [movieDescInput, setMovieDesc] = useState("");
     let [movieDurationInput, setMovieDuration] = useState(0);
     let [imageBlobs, setImageBlobs] = useState([]);
+    let [frontPageImage, SetFrontPageImage] = useState(null)
 
     function CreateMovie() {
         alert("I Clicked IT")
 
-        if (movieNameInput != "" && movieDescInput != "" && movieDurationInput > 0 && imageBlobs.length > 0) {
+        if (movieNameInput != "" && movieDescInput != "" && movieDurationInput > 0 && imageBlobs.length > 0 && frontPageImage != null) {
 
 
             let newMovieData = {
@@ -17,8 +18,10 @@ const AdminPage = () => {
                 Description: movieDescInput,
                 DurationInMinutes: movieDurationInput,
                 ImagesBlobs: imageBlobs.map(image => ({
-                    data: image.blob
-                }))
+                    data: image.data
+                })),
+                FrontPageImage: frontPageImage[0]
+
             }
 
             let userAction = async () => {
@@ -42,17 +45,27 @@ const AdminPage = () => {
         }
     }
 
+    let HandleFrontPageSelect = (event) => {
+        HandleFiles(event, (result) => {
+            SetFrontPageImage(result)
+        });
+    }
+
     let HandleFolderSelect = (event) => {
+        HandleFiles(event, (result) => {
+            setImageBlobs(result)
+        })
+    }
+
+
+    function HandleFiles(event, callback) {
         let files = Array.from(event.target.files);
         let imagesfiles = files.filter(file => {
-            // Check MIME type and file extension
             const fileExtension = file.name.split('.').pop().toLowerCase();
             const mimeType = file.type;
             
-            // Valid image extensions
             const validExtensions = ['jpeg', 'jpg', 'png'];
             
-            // Check if MIME type starts with 'image/' and the extension is valid
             return mimeType.startsWith('image/') && validExtensions.includes(fileExtension);
         })
 
@@ -62,7 +75,7 @@ const AdminPage = () => {
               reader.onloadend = () => {
                 resolve({
                   name: file.name,
-                  blob: reader.result.split(',')[1] // Get base64 content
+                  data: reader.result.split(',')[1] // Get base64 content
                 });
               };
               reader.readAsDataURL(file);
@@ -70,9 +83,10 @@ const AdminPage = () => {
         });
 
         Promise.all(blobs).then(results => {
-            setImageBlobs(results);
-          });
-
+            if (typeof callback === 'function') {
+                callback(results);
+            }
+        });
     }
 
     return (
@@ -92,6 +106,8 @@ const AdminPage = () => {
             <input type="number" value={movieDurationInput} onChange={(e) => setMovieDuration(e.target.value)}></input>
             <label>Images (Upload Folder)</label>
             <input type="file" webkitsirectory="true" multiple onChange={HandleFolderSelect}></input>
+            <label>Front Page Image:</label>
+            <input type="file" onChange={HandleFrontPageSelect}></input>
             <br></br>
             <button onClick={() => CreateMovie()}>Create Movie</button>
         </div>
