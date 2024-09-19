@@ -1,12 +1,15 @@
 @import './BaseVariables.css';
 
+.page-home-frame {
+    overflow: hidden;
+}
+
 .flex-box-home-page {
     display: flex;
     align-items: center;
     justify-content: center; /* Center items horizontally */
     position: relative; /* Ensure the children are positioned relative to this container */
     width: 100%;
-    height: 100%;
     height: 100vh;
 }
 
@@ -70,18 +73,17 @@
 }
 
 .scroll-button-up {
+    font-size: xx-large;
+    width: 50px;
+    height: 50px;
+    padding:3px;
     pointer-events: auto;
     z-index: 9999;
-
+    color:white;
     background-color: transparent;
     border: transparent;
 }
 
-.scroll-button-up::before {
-    content: "▲";
-    font-size: 40px;
-    color:var(--text-color);
-}
 
 .scroll-button-up:hover {
     cursor:pointer;
@@ -90,17 +92,17 @@
 
 
 .scroll-button-down {
+    font-size: xx-large;
+    width: 50px;
+    height: 50px;
+    padding:3px;
+    color:white;
     pointer-events: auto;
     z-index: 9999;
     background-color: transparent;
     border: transparent;
 }
 
-.scroll-button-down::before {
-    content: "▼";
-    font-size: 40px;
-    color:var(--text-color);
-}
 
 .scroll-button-down:hover {
     cursor:pointer;

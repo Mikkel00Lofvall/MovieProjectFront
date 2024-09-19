@@ -1,1 +1,102 @@
 @import './BaseVariables.css';
+
+.page-read-more-frame {
+    padding-top: 50px;
+    overflow: auto;
+}
+
+.page-frame {
+    margin: var(--margin);
+}
+.scroll-container {
+    display: flex;
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
+    width: 100%;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.scroll-container iframe,
+.scroll-container img {
+    width: 100%;
+    height: 500px; 
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.scroll-button-right {
+    font-size: xx-large;
+    padding: 3px;
+    text-align: center;
+    position: absolute;
+    transform: translateY(-50%);
+    z-index: 1;
+    right: 10px;
+    height: 50px;
+    width: 50px;
+    background-color: transparent;
+    border: transparent;
+
+    color:white;
+}
+.scroll-button-left {
+    font-size: xx-large;
+    padding: 3px;
+    text-align: center;
+    position: absolute;
+    transform: translateY(-50%);
+    z-index: 1;
+    height: 50px;
+    width: 50px;
+    left:10px;
+    background-color: transparent;
+    border: transparent;
+
+    color:white;
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+
+.info-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.details-flex-box {
+    display: flex;
+    flex-direction: column;
+    margin: var(--margin);
+    padding: var(--padding);
+}
+
+.description-header,
+.details-header {
+    margin: 5px 0;
+    font-size: large;
+} 
+
+.movie-description-container {
+    color:var(--text-color);
+    margin:var(--margin);
+    padding:var(--padding);
+    font-size: xx-large;
+}
+
+.details-container {
+    display: flex;
+    flex-direction: row;
+    justify-items: space-between;
+}
+
+.detail-name {
+    color:var(--color-hover)
+}
+

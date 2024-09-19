@@ -1,6 +1,7 @@
 import "../css/home.css"
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const HomePage = () => {
     let [loading, setLoading] = useState(true); 
@@ -11,7 +12,7 @@ const HomePage = () => {
             try {
                 let response = await fetch(`https://localhost:7296/api/Movie/GetMovies`);
                 if (!response) {
-                    throw new Error("Network was not okay!")
+                    console.log("Network was not ok!")
                 }
                 let result = await response.json()
                 for (let i = 0; i < result.length; i++) {
@@ -21,7 +22,7 @@ const HomePage = () => {
                 setData(result)
                 console.log(result)
             } catch (err) {
-                throw new Error(err)
+                console.log(err)
             } finally {
                 setLoading(false)
             }
@@ -93,7 +94,7 @@ const HomePage = () => {
     );
 
     return (
-        <div className="home-page-body">
+        <div className="page-home-frame">
             <section className="flex-box-home-page">
                 <div className="left-curtain"></div>
                 <div className="content-container">
@@ -101,8 +102,12 @@ const HomePage = () => {
                             {moviesShownList}
                     </div>
                     <section className="scroll-button-bundle">
-                        <button onClick={() => scrollUp()} className="scroll-button-up" ></button>
-                        <button onClick={() => scrollDown()} className="scroll-button-down" ></button>
+                        <button onClick={() => scrollUp()} className="scroll-button-up" >
+                            <i class="bi bi-arrow-down-circle"></i>
+                        </button>
+                        <button onClick={() => scrollDown()} className="scroll-button-down" >
+                            <i class="bi bi-arrow-up-circle"></i>
+                        </button>
                     </section>
                 </div>
                 <div className="right-curtain"></div>
