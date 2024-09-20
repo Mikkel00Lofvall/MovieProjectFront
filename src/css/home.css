@@ -21,7 +21,7 @@
     background: url('../images/right-curtain-trans.png') no-repeat;
     background-size: cover;
     width: 20%;
-    z-index: 2;
+    z-index: 200;
 }
 
 .left-curtain {
@@ -32,7 +32,7 @@
     background: url('../images/left-curtain-trans.png') no-repeat;
     background-size: cover;
     width: 20%;
-    z-index: 2;
+    z-index: 200;
 }
 
 .content-container {

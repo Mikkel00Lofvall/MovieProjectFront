@@ -4,6 +4,8 @@ import "../css/readmore.css"
 import "../components/breakline" 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Breakline from '../components/breakline';
+import { Link } from "react-router-dom";
+import PopupPage from '../components/popup';
 
 const ReadMorePage = () => {
     const details = ["Release Date", "Rating", "Duration", "Directed By", "Studio"]
@@ -106,24 +108,29 @@ const ReadMorePage = () => {
     return (
         <div className="page-read-more-frame">
             <h2 className="movie-name">{movie.name}</h2>
-            <div className="scroll-container" ref={ImageContainerRef}>
+            <div className="outer-container">
                 <button className="scroll-button-left" onClick={() => ScrollLeft()}>
-                    <i class="bi bi-arrow-left-circle"></i>
+                    <i className="bi bi-arrow-left-circle"></i>
                 </button>
-                <iframe 
-                    width="560" 
-                    height="315" 
-                    src={movie.TrailerLink} 
-                    title="The Matrix Trailer" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
-                {movieImages}   
+
+                <div className="scroll-container" ref={ImageContainerRef}>
+                    <iframe 
+                        width="560" 
+                        height="315" 
+                        src={movie.TrailerLink} 
+                        title="The Matrix Trailer" 
+                        frameBorder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowFullScreen>
+                    </iframe>
+                    {movieImages}
+                </div>
+
                 <button className="scroll-button-right" onClick={() => ScrollRight()}>
-                    <i class="bi bi-arrow-right-circle"></i>
+                    <i className="bi bi-arrow-right-circle"></i>
                 </button>
             </div>
+
             <section>
                 <div className='info-container'>
                     <section className='details-flex-box'>
@@ -135,6 +142,24 @@ const ReadMorePage = () => {
                         <Breakline></Breakline>
                         <label>{movie.description}</label>
                     </section>
+                </div>
+                <div className='ticket-button-container'>
+                    <div className="ticket-button">
+                        <i class="bi bi-ticket-perforated"></i>
+                        <nav>
+                            <Link to={`/schedule/${movie.key}`} className="movie-button-bundle-link">Buy Tickets</Link>
+                        </nav>
+                    </div>
+                </div>
+                <div className='ticket-button-container'>
+                    <div className="ticket-button">
+                        <i class="bi bi-ticket-perforated"></i>
+                        <PopupPage>
+                            <div>
+                                <label>Hello World</label>
+                            </div>
+                        </PopupPage>
+                    </div>
                 </div>
             </section>
         </div>

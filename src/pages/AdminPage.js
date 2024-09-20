@@ -75,7 +75,7 @@ const AdminPage = () => {
               reader.onloadend = () => {
                 resolve({
                   name: file.name,
-                  data: reader.result.split(',')[1] // Get base64 content
+                  data: reader.result.split(',')[1]
                 });
               };
               reader.readAsDataURL(file);
