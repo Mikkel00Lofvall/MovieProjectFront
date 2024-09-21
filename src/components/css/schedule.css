@@ -1,0 +1,61 @@
+@import '../../css/BaseVariables.css';
+
+
+
+
+.schedule-container {
+    padding: 0 20px;
+    min-width: 1000px;
+    min-height: 500px;
+    max-width: 600px;
+}
+
+.schedule-name {
+    margin: 5px 0 10px 0px;
+}
+
+.week-navigation {
+    margin-bottom: 10px;
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.header-cell {
+    background-color: black;
+    text-align: center;
+    padding: 5px;
+}
+
+.schedule-row {
+    height: 50px;
+}
+
+.time-cell {
+    width: 80px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    border: 1px solid #ccc;
+}
+
+.schedule-cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.scheduled-event {
+    background-color: green; /* Change this to your desired color */
+}
+
+.scrollable {
+    max-height: 500px; /* Adjust height as needed */
+    overflow-y: auto; /* Enables scrolling */
+}
+
+

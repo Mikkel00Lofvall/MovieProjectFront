@@ -2,6 +2,7 @@ import "../css/home.css"
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { Base64ToURL } from "../global/functions.js"
 
 const HomePage = () => {
     let [loading, setLoading] = useState(true); 
@@ -51,17 +52,7 @@ const HomePage = () => {
         }
     };
 
-    function Base64ToURL(base64) {
-        let byteString = atob(base64)
-        let byteArray  = new Uint8Array(byteString.length)
 
-        for (let i = 0; i < byteString.length; i++) {
-            byteArray[i] = byteString.charCodeAt(i);
-        }
-        let blob = new Blob([byteArray], { type: "application/octect-stream" })
-        let url = URL.createObjectURL(blob);
-        return url;
-    }
 
     let moviesShownList = movies.map(function(movie) {
         return ( 
@@ -69,7 +60,7 @@ const HomePage = () => {
                 <img className="movie-image" src={movie.frontPageImage} alt={movie.name} />
                 <div className="movie-desc-box">
                     <h3 className="movie-box-name">{movie.name}</h3>
-                    <h3 className="movie-box-date">{movie.date}</h3>
+                    <h3 className="movie-box-date">{movie.details.releaseDate}</h3>
                     <div className="movie-button-bundle">
                         <div className="movie-box-button">
                             <nav>
@@ -88,7 +79,7 @@ const HomePage = () => {
     });
 
     if (loading) return (
-        <div>
+        <div className="page-home-frame">
             <label>Loading</label>
         </div>
     );
@@ -103,10 +94,10 @@ const HomePage = () => {
                     </div>
                     <section className="scroll-button-bundle">
                         <button onClick={() => scrollUp()} className="scroll-button-up" >
-                            <i class="bi bi-arrow-down-circle"></i>
+                            <i class="bi bi-arrow-up-circle"></i>
                         </button>
                         <button onClick={() => scrollDown()} className="scroll-button-down" >
-                            <i class="bi bi-arrow-up-circle"></i>
+                            <i class="bi bi-arrow-down-circle"></i>
                         </button>
                     </section>
                 </div>
