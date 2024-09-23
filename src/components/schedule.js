@@ -1,9 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import "./css/schedule.css"
 import Breakline from './breakline';
 
-const ScheduleTable = ({movieID}) => {
+const ScheduleTable = ({ movieID }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [scheduleData, setScheduleData] = useState([]);
@@ -18,6 +17,7 @@ const ScheduleTable = ({movieID}) => {
                 }
                 let result = await response.json();
                 setScheduleData(result);
+                console.log("Schedule Data:", result);  // Log the fetched schedule data
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -58,13 +58,16 @@ const ScheduleTable = ({movieID}) => {
         return allHours.map((hour, hourIndex) => (
             <tr key={hourIndex} className="schedule-row">
                 <td className="time-cell">{hour.toString().padStart(2, "0")}:00</td>
-                {weekDates.map((date, dayIndex) => (
-                    <td 
-                        key={dayIndex} 
-                        id={`${date.toDateString()}-${hour}`} 
-                        className="schedule-cell" // Class for styling
-                    ></td>
-                ))}
+                {weekDates.map((date, dayIndex) => {
+                    const cellId = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}-${hour}`;
+                    return (
+                        <td 
+                            key={dayIndex} 
+                            id={cellId}  // Format: YYYY-MM-DD-hour
+                            className="schedule-cell"
+                        ></td>
+                    );
+                })}
             </tr>
         ));
     };
@@ -73,7 +76,7 @@ const ScheduleTable = ({movieID}) => {
         let cells = document.querySelectorAll("td.schedule-cell");
         cells.forEach((cell) => {
             if (cell.id) {
-                cell.style.backgroundColor = "";
+                cell.style.backgroundColor = "transparent";
             }
         });
     };
@@ -81,20 +84,31 @@ const ScheduleTable = ({movieID}) => {
     const populateTable = () => {
         clearTable();
 
+        console.log("Populating table...");
+
         scheduleData.forEach((item) => {
+            // Construct event date from the fetched data
             let eventDate = new Date(item.date.year, item.date.month - 1, item.date.day, item.date.hour);
 
-            if (eventDate >= weekDates[0] && eventDate <= weekDates[6]) {
-                let eventHour = eventDate.getHours();
-                let targetCell = document.getElementById(`${eventDate.toDateString()}-${eventHour}`);
-                if (targetCell) {
-                    targetCell.classList.add("scheduled-event"); // Use a class for background color
-                }
+            // Compare only the year, month, day, and hour to match the cell ID
+            const eventId = `${eventDate.getFullYear()}-${(eventDate.getMonth() + 1).toString().padStart(2, '0')}-${eventDate.getDate().toString().padStart(2, '0')}-${eventDate.getHours()}`;
+
+            console.log(`Event ID: ${eventId}`);
+
+            // Try to get the target cell by matching the generated event ID
+            let targetCell = document.getElementById(eventId);
+
+            if (targetCell) {
+                console.log(`Target cell found: ${eventId}`);
+                targetCell.classList.add("scheduled-event"); // Use a class for background color
+            } else {
+                console.log(`No cell found for: ${eventId}`);
             }
         });
     };
 
-    useEffect(() => {
+    // Use useLayoutEffect to ensure the DOM is fully updated before modifying it
+    useLayoutEffect(() => {
         if (scheduleData.length > 0) {
             populateTable();
         }
@@ -132,4 +146,4 @@ const ScheduleTable = ({movieID}) => {
     );
 };
 
-export default ScheduleTable
+export default ScheduleTable;
