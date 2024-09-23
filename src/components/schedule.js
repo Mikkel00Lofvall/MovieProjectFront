@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { ScheduleTest } from "../global/testdata"
 import "./css/schedule.css"
 import Breakline from './breakline';
 
@@ -9,7 +10,7 @@ const ScheduleTable = ({movieID}) => {
     const [scheduleData, setScheduleData] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
 
-    useEffect(() => {
+    /*useEffect(() => {
         const fetchData = async () => {
             try {
                 let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
@@ -26,7 +27,9 @@ const ScheduleTable = ({movieID}) => {
         };
 
         fetchData();
-    }, [movieID]);
+    }, [movieID]);*/
+
+
 
     const getStartOfWeek = (date) => {
         let currentDay = date.getDay();
