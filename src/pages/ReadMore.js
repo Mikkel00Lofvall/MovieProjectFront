@@ -1,21 +1,21 @@
 import { useParams } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "../css/readmore.css"
 import "../components/breakline" 
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import Breakline from '../components/breakline';
-import { Link } from "react-router-dom";
 import PopupPage from '../components/popup';
 import { Base64ToURL } from '../global/functions';
 import TicketPage from './TicketPage';
 
 const ReadMorePage = () => {
-    const { id } = useParams();
+    let { id } = useParams();
     let [scheduleData, setScheduleData] = useState([]);
-    const [movie, setData] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [isPopupOpen, setIsPopupOpen] = useState(false); 
+    let [movie, setData] = useState(null);
+    let [error, setError] = useState(null);
+    let [loading, setLoading] = useState(true);
+    let [isPopupOpen, setIsPopupOpen] = useState(false); 
+    let FetchedSchedule = useRef(false);
 
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
@@ -80,22 +80,30 @@ const ReadMorePage = () => {
         fetchData();
     }, [id]);
 
+    useEffect(() => {
+        FetchedSchedule.current = false
+    }, [id])
+
 
     const FetchSchedulesByMovieID = async (movieID) => {
         try {
             let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
             if (!response.ok) {
-                throw new Error("Network was not okay!");
+                console.log("Network was not okay!")
             }
             let result = await response.json();
             setScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            throw new Error(err)
+            console.log(err)
         } finally {
             setLoading(false);
         }
     };
+
+
+
+
 
 
 
@@ -135,14 +143,19 @@ const ReadMorePage = () => {
         );
     });
 
+
+
     return (
         <div className="page-read-more-frame" onLoad={() => {
-            setScheduleData([]);
-            FetchSchedulesByMovieID(movie.key);
+            if (id && !FetchedSchedule.current) {
+                setScheduleData([]);
+                FetchSchedulesByMovieID(id);
+                FetchedSchedule.current = true;
+            }
         }}>
             {isPopupOpen && (
                 <PopupPage onClose={closePopup}>
-                    <TicketPage scheduleData={scheduleData}></TicketPage>
+                    <TicketPage fetchedData={scheduleData}></TicketPage>
                 </PopupPage>
             )}
             <h2 className="movie-name">{movie.name}</h2>

@@ -1,0 +1,6 @@
+@import './BaseVariables.css';
+
+.page-seat-frame {
+    padding-top: 60px;
+    overflow: auto;
+}

@@ -19,6 +19,8 @@ const AdminPage = () => {
     let [loading, setLoading] = useState(true); 
     let [movies, setMoviesData] = useState([]);
     let [SelectedHall, setSelectedHall] = useState(0)
+    let [RowAmount, setRowAmount] = useState(0)
+    let [SeatsOnARow, setSeatOnARow] = useState(0)
 
     const [isScheduleOpen, setIsScheduleOpen] = useState(false); 
 
@@ -113,13 +115,18 @@ const AdminPage = () => {
         try {
             let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
             if (!response.ok) {
-                throw new Error("Network was not okay!");
+                console.log("Network was not okay!")
+            }
+
+            if (response == "No Schedules for this movie!") {
+                console.log("No Schedules for this movie!")
             }
             let result = await response.json();
+            result.append({MovieId: movieID })
             setScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            throw new Error(err)
+            console.log(err)
         } finally {
             setLoading(false);
         }
@@ -180,13 +187,13 @@ const AdminPage = () => {
      }, [])
 
     const CreateHall = async () => {
-        if (CinemaName != "") {
+        if (CinemaName != "" && RowAmount > 0 && SeatsOnARow > 0) {
             let response = await fetch("https://localhost:7296/api/CinemaHall/CreateHall", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({name: CinemaName})
+                body: JSON.stringify({name: CinemaName, rowAmount: RowAmount, seatsOnARow: SeatsOnARow})
             });
             
             if (response.ok) {
@@ -228,6 +235,11 @@ const AdminPage = () => {
 
     }
 
+    if (loading) return (
+        <div className="page-admin-frame">
+            <label>Loading</label>
+        </div>
+    );
 
     let moviesShownList = movies.map(function(movie) {
         return ( 
@@ -240,7 +252,7 @@ const AdminPage = () => {
                     <PopupPage onClose={() => {
                         setIsScheduleOpen(false);
                     }}>
-                        <TicketPage scheduleData={scheduleData}></TicketPage>
+                        <TicketPage fetchedData={scheduleData}></TicketPage>
                         <label>Date: </label>
                         <input 
                             className="page-admin-input-date" 
@@ -348,6 +360,14 @@ const AdminPage = () => {
                 <label>Name</label>
                 <br></br>
                 <input type="text" onChange={(e) => setCinemaName(e.target.value)}></input>
+                <br></br>
+                <label>Seat Rows</label>
+                <br></br>
+                <input type="number" onChange={(e) => setRowAmount(e.target.value)}></input>
+                <br></br>
+                <label>Seats In On a Row</label>
+                <br></br>
+                <input type="number" onChange={(e) => setSeatOnARow(e.target.value)}></input>
                 <br></br>
                 <br></br>
                 <button onClick={CreateHall} >Create CinemaHall</button>
