@@ -1,4 +1,4 @@
-    const movie = {
+    const MovieTest = {
         name:"Hello World",
         frontPageImage:"https://picsum.photos/200/300",
         imagesBlobs: [
@@ -23,5 +23,20 @@
     }
 
 
+    const ScheduleTest = {
+        "id": 1,                   // ScheduleModel ID
+        "MovieId": null,             // Foreign key to MovieModel
+        "Date": {                  // DateModel (representing the schedule date and time)
+          "id": 0,                 // DateModel ID (optional to return)
+          "Year": 2024,            // Year of the schedule
+          "Month": 9,             // Month of the schedule
+          "Day": 25,               // Day of the schedule
+          "Hour": 19,              // Hour (24-hour format)
+          "Minute": 30,            // Minute
+          "Second": 0              // Second
+        }
+      }
 
-    export default movie
+
+
+    export default {MovieTest, ScheduleTest}

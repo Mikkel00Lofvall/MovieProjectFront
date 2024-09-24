@@ -11,6 +11,7 @@ import TicketPage from './TicketPage';
 
 const ReadMorePage = () => {
     const { id } = useParams();
+    let [scheduleData, setScheduleData] = useState([]);
     const [movie, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -18,6 +19,7 @@ const ReadMorePage = () => {
 
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
+
       };
     
       const closePopup = () => {
@@ -79,6 +81,21 @@ const ReadMorePage = () => {
     }, [id]);
 
 
+    const FetchSchedulesByMovieID = async (movieID) => {
+        try {
+            let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
+            if (!response.ok) {
+                throw new Error("Network was not okay!");
+            }
+            let result = await response.json();
+            setScheduleData(result);
+            console.log("Schedule Data:", result);
+        } catch (err) {
+            throw new Error(err)
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
 
@@ -119,10 +136,13 @@ const ReadMorePage = () => {
     });
 
     return (
-        <div className="page-read-more-frame">
+        <div className="page-read-more-frame" onLoad={() => {
+            setScheduleData([]);
+            FetchSchedulesByMovieID(movie.key);
+        }}>
             {isPopupOpen && (
                 <PopupPage onClose={closePopup}>
-                    <TicketPage movieID={movie.key}></TicketPage>
+                    <TicketPage scheduleData={scheduleData}></TicketPage>
                 </PopupPage>
             )}
             <h2 className="movie-name">{movie.name}</h2>
@@ -161,17 +181,10 @@ const ReadMorePage = () => {
                         <label>{movie.description}</label>
                     </section>
                 </div>
-                <div className='ticket-button-container'>
-                    <div className="ticket-button">
-                        <i className="bi bi-ticket-perforated"></i>
-                        <nav>
-                            <Link to={`/schedule/${movie.key}`} className="movie-button-bundle-link">Buy Tickets</Link>
-                        </nav>
-                    </div>
-                </div>
                 <div className="ticket-button-container">
                     <div className="ticket-button" onClick={togglePopup}>
                         <i className="bi bi-ticket-perforated"></i>
+                        <div>Buy Tickets</div>
                     </div>
                 </div>
             </section>

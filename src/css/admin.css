@@ -2,3 +2,62 @@
     padding-top: 60px;
     overflow: auto;
 }
+
+.page-admin-movie-box {
+    max-width: 240px;
+    min-width: 240px;
+    max-height: 500px;
+    margin:30px;
+    position: relative;
+    background-color: var(--background);
+    border-radius: 0px 0px 25px 25px;
+    border: solid black 2px;
+    box-shadow: 0px 0px 10px 10px #000000;
+}
+
+.page-admin-movie-box:hover .page-admin-movie-box-name {
+    text-decoration: underline;
+
+}
+
+.page-admin-movie-box-name {
+    padding: var(--padding);
+    margin: var(--margin);
+}
+
+.page-admin-movie-box-date {
+    padding: var(--padding);
+    margin: var(--margin);
+}
+
+.page-admin-movie-image {
+    width:100%;
+    height: 70%;
+    transition: opacity 0.3s ease;
+    object-fit: cover;
+}
+
+.page-admin-movie-box:hover .movie-image {
+    opacity: 0.5;
+}
+
+.page-admin-movie-desc-box {
+    transition: background-color 0.3s ease;
+    margin: 0px var(--margin) 0px var(--margin);
+}
+
+
+
+.page-admin-movie-box-name {
+    text-decoration: none;
+    font-size: large;
+    padding: var(--padding);
+    margin: var(--margin);
+    transition: text-decoration 0.3s ease;
+}
+
+
+.page-admin-movie-box:Hover {
+    cursor: pointer;
+
+}

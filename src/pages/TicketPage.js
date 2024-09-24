@@ -7,10 +7,10 @@ import "../css/ticket.css"
 import ScheduleTable from "../components/schedule";
 
 
-const TicketPage = ({ movieID }) => {
+const TicketPage = ({ scheduleData }) => {
   return (
     <div>
-      <ScheduleTable movieID={movieID}></ScheduleTable>
+      <ScheduleTable scheduleData={scheduleData}></ScheduleTable>
     </div>
   );
 };
