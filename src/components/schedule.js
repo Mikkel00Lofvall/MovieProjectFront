@@ -2,149 +2,124 @@ import React, { useState, useEffect } from 'react';
 import "./css/schedule.css";
 import { useNavigate } from 'react-router-dom';
 
+
 let ScheduleTable = ({scheduleData, schedulelink}) => {
-    let [error, setError] = useState(null);
-    let [loading, setLoading] = useState(true);
+    let navigate = useNavigate();
 
-    let [currentDate, setCurrentDate] = useState(new Date());
-    let [weekDates, setWeekDates] = useState([]);
+    let handleNavigation = (schedule) => {
+        if (schedule && schedule.id) {
+          navigate(`${schedulelink}${schedule.id}`);
+        } else {
+          console.warn("Schedule ID is undefined");
+        }
+      };
 
 
-    const navigate = useNavigate();
+    let daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    const handleNavigation = (item) => {
-        navigate(`${schedulelink}${item.id}`);
+    let getStartOfWeek = (date) => {
+      let currentDay = date.getDay();
+      let distanceToMonday = currentDay === 0 ? 6 : currentDay - 1;
+      let monday = new Date(date);
+      monday.setDate(date.getDate() - distanceToMonday);
+      return monday;
     };
-
-    useEffect(() => {
-        const startOfWeek = getStartOfWeek(currentDate);
-        const weekDays = Array.from({ length: 7 }).map((_, i) => {
-            let newDate = new Date(startOfWeek);
-            newDate.setDate(startOfWeek.getDate() + i);
-            return newDate;
-        });
-        setWeekDates(weekDays);
-    }, [currentDate]);
-
-    if (scheduleData == null || scheduleData == "undefined") return (
-        <div className="schedule-container">
-            <label>Loading</label>
-        </div>
-    );
-
-
-    const getStartOfWeek = (date) => {
-        let currentDay = date.getDay();
-        let mondayOffset = currentDay === 0 ? -6 : 1 - currentDay;
-        let monday = new Date(date);
-        monday.setDate(date.getDate() + mondayOffset);
-        return monday;
+    
+    let getDayOfWeek = (date) => {
+      return daysOfWeek[date.getDay() === 0 ? 6 : date.getDay() - 1];
     };
-
-
-
-
-    const changeWeek = (direction) => {
-        let newDate = new Date(currentDate);
-        newDate.setDate(currentDate.getDate() + direction * 7);
-        setCurrentDate(newDate);
+    
+    let [currentWeek, setCurrentWeek] = useState(getStartOfWeek(new Date()));
+    
+    let formatDate = (date) => {
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     };
-
-
-
-
-    const createEventsForDay = (day, selectedMovieId) => {
-        console.log("Received Schedule Data: ", scheduleData);
     
-        return scheduleData
-            .filter((data) => {
-                const { schedule } = data; // Destructure schedule from each data object
-    
-                // Ensure that the date and movieId exist in the schedule
-                if (!schedule || !schedule.date || !schedule.movieId) {
-                    console.warn("Invalid data for schedule:", schedule);
-                    return false;
-                }
-    
-                // Filter by both the selected day and the selected movieId
-                let eventDate = new Date(
-                    schedule.date.year,
-                    schedule.date.month - 1,  // JavaScript months are 0-indexed
-                    schedule.date.day,
-                    schedule.date.hour,
-                    schedule.date.minute
-                );
-    
-                return (
-                    eventDate.getFullYear() === day.getFullYear() &&
-                    eventDate.getMonth() === day.getMonth() &&
-                    eventDate.getDate() === day.getDate() &&
-                    schedule.movieId === selectedMovieId // Ensure the movieId matches
-                );
-            })
-            .map((data, index) => {
-                const { schedule } = data; // Access schedule again
-    
-                let eventDate = new Date(
-                    schedule.date.year,
-                    schedule.date.month - 1,
-                    schedule.date.day,
-                    schedule.date.hour,
-                    schedule.date.minute
-                );
-                let hour = eventDate.getHours();
-                let minute = eventDate.getMinutes();
-                let topPosition = (hour * 60 + minute) * 0.5;
-    
-                return (
-                    <div
-                        key={index}
-                        className="event"
-                        style={{
-                            position: "absolute",
-                            top: `${topPosition}px`,
-                            width: "100%",
-                            height: "50px",
-                            backgroundColor: "rgba(0, 123, 255, 0.7)",
-                            borderRadius: "4px",
-                            padding: "5px",
-                            boxSizing: "border-box"
-                        }}
-                        onClick={() => {
-                            handleNavigation(schedulelink+schedule.id);
-                        }}
-                    >
-                        Time: {eventDate.getHours()}:{eventDate.getMinutes().toString().padStart(2, '0')}
-                    </div>
-                );
-            });
+    let getWeekDays = (startOfWeek) => {
+    let weekDays = [];
+    for (let i = 0; i < 7; i++) {
+        let day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        weekDays.push(day);
+    }
+    return weekDays;
     };
+    
+    let handlePreviousWeek = () => {
+    let prevWeek = new Date(currentWeek);
+    prevWeek.setDate(currentWeek.getDate() - 7);
+    setCurrentWeek(prevWeek);
+    };
+    
+    let handleNextWeek = () => {
+    let nextWeek = new Date(currentWeek);
+    nextWeek.setDate(currentWeek.getDate() + 7);
+    setCurrentWeek(nextWeek);
+    };
+    
+    let weekDays = getWeekDays(currentWeek); 
+
+    let filteredScheduleData = scheduleData.filter(entry => {
+    let { date } = entry.schedule;
+    let scheduleDate = new Date(date.year, date.month - 1, date.day);
+    return scheduleDate >= currentWeek && scheduleDate < new Date(currentWeek.getTime() + 7 * 24 * 60 * 60 * 1000);
+    });
 
     return (
-        <div className="schedule-container">
-            <h2 className="schedule-name">Weekly Schedule</h2>
+        <div className='schedule-container'>
+            <h1>Schedule For Movie</h1>
+
             <div className="week-navigation">
-                <button onClick={() => changeWeek(-1)}>Previous Week</button>
-                <span>
-                    {weekDates[0]?.toDateString()} - {weekDates[6]?.toDateString()}
-                </span>
-                <button onClick={() => changeWeek(1)}>Next Week</button>
+                <button onClick={handlePreviousWeek}>Previous Week</button>
+                <button onClick={handleNextWeek}>Next Week</button>
             </div>
-            <div className="scrollable">
-                <div className="schedule-grid">
-                    {weekDates.map((date, index) => (
-                        <div key={index} className="day-column">
-                            <div className="day-header">{date.toDateString()}</div>
-                            <div className="day-body">
-                                {createEventsForDay(date)}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+
+            <table className="schedule-table">
+                <thead>
+                    <tr>
+                        {weekDays.map((day, index) => (
+                            <th key={index}>{getDayOfWeek(day)} <br /> {formatDate(day)}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {weekDays.map((day, index) => {
+                        const daySchedules = filteredScheduleData.filter(entry => {
+                            const { date } = entry.schedule;
+                            const scheduleDate = new Date(date.year, date.month - 1, date.day);
+                            return scheduleDate.getDate() === day.getDate();
+                        });
+
+                        return (
+                            <td key={index}>
+                                {daySchedules.length > 0 ? (
+                                    daySchedules.map((entry, i) => {
+                                        const schedule = entry.schedule;
+
+                                        return (
+                                            <div
+                                                key={i}
+                                                className="schedule-box"
+                                                onClick={() => handleNavigation(schedule)}
+                                            >
+                                                <div className='event-box'>
+                                                    {`Time: ${schedule.date.hour}:00`} <br />
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <div>No Schedules for this day</div>
+                                )}
+                            </td>
+                        );
+                    })}
+                </tbody>
+            </table>
             </div>
-            {error && <div>Error: {error}</div>}
-        </div>
-    );
-};
+        );
+    };
+
+  
 
 export default ScheduleTable;

@@ -7,8 +7,7 @@ import "../css/ticket.css"
 import ScheduleTable from "../components/schedule";
 
 
-const TicketPage = ({ fetchedData }) => {
-  console.log("Data: ", fetchedData)
+const TicketPage = ( { fetchedData, MovieID } ) => {
   return (
 
     <div>

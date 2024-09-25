@@ -6,6 +6,7 @@ import "../css/admin.css"
 
 
 const AdminPage = () => {
+    let [selectedMovieID, setSelectedMovieID] = useState(0);
     let [scheduleData, setScheduleData] = useState([]);
     let [movieNameInput, setMovieName] = useState("");
     let [movieDescInput, setMovieDesc] = useState("");
@@ -116,13 +117,14 @@ const AdminPage = () => {
             let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
             if (!response.ok) {
                 console.log("Network was not okay!")
+                return
             }
 
             if (response == "No Schedules for this movie!") {
                 console.log("No Schedules for this movie!")
             }
             let result = await response.json();
-            result.append({MovieId: movieID })
+
             setScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
@@ -241,37 +243,40 @@ const AdminPage = () => {
         </div>
     );
 
-    let moviesShownList = movies.map(function(movie) {
+    let moviesShownList = movies.map((movie) => {
         return ( 
-            <section className="page-admin-movie-box" key={movie.key} onClick={() => {
+            <section id={movie.key} className="page-admin-movie-box" key={movie.key} onClick={() => {
                 setIsScheduleOpen(!isScheduleOpen);
                 setScheduleData([]);
                 FetchSchedulesByMovieID(movie.key);
+                setSelectedMovieID(movie.key);
             }}>
                 {isScheduleOpen && (
                     <PopupPage onClose={() => {
                         setIsScheduleOpen(false);
                     }}>
-                        <TicketPage fetchedData={scheduleData}></TicketPage>
+                        <TicketPage fetchedData={scheduleData} />
+    
                         <label>Date: </label>
                         <input 
                             className="page-admin-input-date" 
                             type="date" 
                             onChange={(e) => {
                                 let dateValue = e.target.value;
-                                let dateObject = new Date(dateValue)
+                                let dateObject = new Date(dateValue);
                                 let dateComponent = {
                                     year: dateObject.getFullYear(),
-                                    month: dateObject.getMonth() + 1, // Months are zero-indexed
+                                    month: dateObject.getMonth() + 1,
                                     day: dateObject.getDate(),
                                     hour: dateObject.getHours(),
                                     minute: dateObject.getMinutes(),
                                     second: dateObject.getSeconds(),                                    
-                                }
-
-                                setSelectedDate(dateComponent)
+                                };
+    
+                                setSelectedDate(dateComponent);
                             }}
-                        ></input>
+                        />
+    
                         <label>Theatre Hall: </label>
                         <select onChange={(e) => {
                             const value = e.target.value;
@@ -283,9 +288,15 @@ const AdminPage = () => {
                                 <option key={hall.id} value={hall.id}>{hall.name}</option>
                             ))}
                         </select>
-                        <button onClick={() => CreateSchedule(movie.key)}>Add New Schedule</button>
+    
+                        <button onClick={() => {
+                            CreateSchedule(selectedMovieID);
+                        }}>
+                            Add New Schedule
+                        </button>
                     </PopupPage>
                 )}
+    
                 <img className="page-admin-movie-image" src={movie.frontPageImage} alt={movie.name} />
                 <div className="page-admin-movie-desc-box">
                     <h3 className="page-admin-movie-box-name">{movie.name}</h3>

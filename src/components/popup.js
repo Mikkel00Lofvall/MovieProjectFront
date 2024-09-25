@@ -2,7 +2,7 @@ import "./css/popup.css"
 import React from 'react';
 
 
-const PopupPage = ({ children, onClose }) => {
+let PopupPage = ({ children, onClose }) => {
   return (
     <>
       <div className="popup-modal" onClick={onClose}>
