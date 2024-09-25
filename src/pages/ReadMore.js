@@ -139,7 +139,7 @@ const ReadMorePage = () => {
 
     let movieImages = movie.imagesBlobs.map(function(blob) {
         return (
-            <img src={blob} alt="Random Image 1" />
+            <img src={blob} alt="Random Image 1" className='page-read-movie-image' />
         );
     });
 

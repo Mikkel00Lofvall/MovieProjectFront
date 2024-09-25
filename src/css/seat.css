@@ -1,6 +1,91 @@
 @import './BaseVariables.css';
 
 .page-seat-frame {
-    padding-top: 60px;
+    padding: 100px 20px 0px 20px;
     overflow: auto;
+    height: 100vh;
+    overflow: hidden;
 }
+
+.page-seat-flex-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap:100px;
+}
+
+.page-seat-details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 400px;
+    max-height: 400px;   
+}
+
+.page-seat-movie-detail-container {
+    padding: var(--padding);
+    margin: var(--margin);
+
+
+}
+
+.page-seat-moive-image {
+    max-width: 50%;
+    height: auto;
+    transition: opacity 0.3s ease;
+    object-fit: cover;
+}
+
+.page-seat-selector-container {
+    width: 100%;
+    margin:var(--margin);
+    padding: var(--padding);
+    flex: 8;
+    box-shadow: 0px 0px 10px 10px var(--color-black);
+}
+
+.page-seat-container {
+    margin:var(--margin);
+    padding: var(--padding);
+
+    box-shadow: 0px 0px 10px 10px var(--color-black);
+}
+
+.page-seat-chunks {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 8;
+}
+
+.page-seat-div {
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.page-seat-div:hover {
+    cursor: pointer;
+    
+}
+
+.page-seat-screen {
+    background-color: aliceblue;
+    width: 100%;
+    height: 20px;
+    margin: var(--margin);
+    justify-content: center;
+    align-items: center;
+
+}
+
+.page-seat-screen label {
+    color:var(--color-black);
+
+}
+

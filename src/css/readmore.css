@@ -14,6 +14,8 @@
     margin: var(--margin);
 }
 
+
+
 .outer-container {
     position: relative;
     width: 100%;
@@ -21,12 +23,12 @@
 
 .scroll-container {
     display: flex;
-    overflow-x: hidden; /* Horizontal scroll */
-    overflow-y: hidden; /* No vertical scroll in the images container */
+    overflow-x: hidden;
+    overflow-y: hidden;
     white-space: nowrap;
     width: 100%;
     align-items: center;
-    scroll-behavior: smooth; /* Optional: smooth scrolling */
+    scroll-behavior: smooth;
 }
 
 .scroll-container iframe,
