@@ -32,7 +32,7 @@ let ScheduleTable = ({scheduleData, schedulelink}) => {
     let [currentWeek, setCurrentWeek] = useState(getStartOfWeek(new Date()));
     
     let formatDate = (date) => {
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     };
     
     let getWeekDays = (startOfWeek) => {
@@ -46,23 +46,28 @@ let ScheduleTable = ({scheduleData, schedulelink}) => {
     };
     
     let handlePreviousWeek = () => {
-    let prevWeek = new Date(currentWeek);
-    prevWeek.setDate(currentWeek.getDate() - 7);
-    setCurrentWeek(prevWeek);
+        let prevWeek = new Date(currentWeek);
+        prevWeek.setDate(currentWeek.getDate() - 7);
+        setCurrentWeek(prevWeek);
     };
     
     let handleNextWeek = () => {
-    let nextWeek = new Date(currentWeek);
-    nextWeek.setDate(currentWeek.getDate() + 7);
-    setCurrentWeek(nextWeek);
+        let nextWeek = new Date(currentWeek);
+        nextWeek.setDate(currentWeek.getDate() + 7);
+        setCurrentWeek(nextWeek);
+    };
+
+    const formatTime = (hour, minute) => {
+        return `${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}`;
     };
     
     let weekDays = getWeekDays(currentWeek); 
 
     let filteredScheduleData = scheduleData.filter(entry => {
-    let { date } = entry.schedule;
-    let scheduleDate = new Date(date.year, date.month - 1, date.day);
-    return scheduleDate >= currentWeek && scheduleDate < new Date(currentWeek.getTime() + 7 * 24 * 60 * 60 * 1000);
+        let { date } = entry.schedule;
+
+        let scheduleDate = new Date(date.year, date.month - 1, date.day);
+        return scheduleDate >= currentWeek && scheduleDate < new Date(currentWeek.getTime() + 7 * 24 * 60 * 60 * 1000);
     });
 
     return (
@@ -102,8 +107,8 @@ let ScheduleTable = ({scheduleData, schedulelink}) => {
                                                 className="schedule-box"
                                                 onClick={() => handleNavigation(schedule)}
                                             >
-                                                <div className='event-box'>
-                                                    {`Time: ${schedule.date.hour}:00`} <br />
+                                                <div className='event-box'> 
+                                                    {`Time: ${formatTime(schedule.date.hour, schedule.date.minute)}`} <br />
                                                 </div>
                                             </div>
                                         );

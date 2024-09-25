@@ -14,7 +14,6 @@ const AdminPage = () => {
     let [imageBlobs, setImageBlobs] = useState([]);
     let [frontPageImage, SetFrontPageImage] = useState(null)
     let [dateString, setDateString] = useState('');
-    let [selectedDate, setSelectedDate] = useState('');
     let [CinemaHalls, setCinemaHalls] = useState(null)
     let [CinemaName, setCinemaName] = useState("")
     let [loading, setLoading] = useState(true); 
@@ -22,6 +21,8 @@ const AdminPage = () => {
     let [SelectedHall, setSelectedHall] = useState(0)
     let [RowAmount, setRowAmount] = useState(0)
     let [SeatsOnARow, setSeatOnARow] = useState(0)
+    let [selectedDate, setSelectedDate] = useState({});
+    let [selectedTime, setSelectedTime] = useState('');
 
     const [isScheduleOpen, setIsScheduleOpen] = useState(false); 
 
@@ -237,6 +238,10 @@ const AdminPage = () => {
 
     }
 
+    const BuildTimeComponent = () => {
+
+    }
+
     if (loading) return (
         <div className="page-admin-frame">
             <label>Loading</label>
@@ -252,48 +257,82 @@ const AdminPage = () => {
                 setSelectedMovieID(movie.key);
             }}>
                 {isScheduleOpen && (
+
                     <PopupPage onClose={() => {
                         setIsScheduleOpen(false);
                     }}>
                         <TicketPage fetchedData={scheduleData} />
-    
-                        <label>Date: </label>
-                        <input 
-                            className="page-admin-input-date" 
-                            type="date" 
-                            onChange={(e) => {
-                                let dateValue = e.target.value;
-                                let dateObject = new Date(dateValue);
-                                let dateComponent = {
-                                    year: dateObject.getFullYear(),
-                                    month: dateObject.getMonth() + 1,
-                                    day: dateObject.getDate(),
-                                    hour: dateObject.getHours(),
-                                    minute: dateObject.getMinutes(),
-                                    second: dateObject.getSeconds(),                                    
-                                };
-    
-                                setSelectedDate(dateComponent);
-                            }}
-                        />
-    
-                        <label>Theatre Hall: </label>
-                        <select onChange={(e) => {
-                            const value = e.target.value;
-                            setSelectedHall(value);
-                            console.log("Selected Hall ID:", value);
-                        }}>
-                            <option value="">Select a Hall</option>
-                            {CinemaHalls.map((hall) => (
-                                <option key={hall.id} value={hall.id}>{hall.name}</option>
-                            ))}
-                        </select>
-    
-                        <button onClick={() => {
-                            CreateSchedule(selectedMovieID);
-                        }}>
-                            Add New Schedule
-                        </button>
+                        <div className="schedule-creator-container">
+                            <section className="schedule-creator-time-container">
+                                <label>Time: </label>
+                                <input 
+                                    id="time-input"
+                                    type="time"
+                                    value={selectedTime}
+                                    onChange={(e) => {
+                                        const timeValue = e.target.value;
+                                        setSelectedTime(timeValue);
+
+                                        // Extract hour and minute from the selected time
+                                        const [hour, minute] = timeValue.split(':').map(Number);
+
+                                        // Update selectedDate with the selected time
+                                        setSelectedDate(prevDate => ({
+                                            ...prevDate,
+                                            hour: hour,
+                                            minute: minute
+                                        }));
+                                    }}
+                                />
+                            </section>
+                            
+                            <section className="schedule-creator-date-container">
+                                <label>Date: </label>
+                                <input 
+                                    className="page-admin-input-date" 
+                                    type="date" 
+                                    onChange={(e) => {
+                                        let dateValue = e.target.value;
+                                        let dateObject = new Date(dateValue);
+                                        let dateComponent = {
+                                            year: dateObject.getFullYear(),
+                                            month: dateObject.getMonth() + 1,
+                                            day: dateObject.getDate(),
+                                            hour: selectedDate.hour || 0, // Set default hour if not set yet
+                                            minute: selectedDate.minute || 0, // Set default minute if not set yet
+                                            second: dateObject.getSeconds(),
+                                        };
+
+                                        setSelectedDate(dateComponent);
+                                    }}
+                                />  
+                            </section>
+
+                            <section className="schedule-creator-Hall-container">
+                                <label>Theatre Hall: </label>
+                                <select onChange={(e) => {
+                                    const value = e.target.value;
+                                    setSelectedHall(value);
+                                    console.log("Selected Hall ID:", value);
+                                }}>
+                                    <option value="">Select a Hall</option>
+                                    {CinemaHalls.map((hall) => (
+                                        <option key={hall.id} value={hall.id}>{hall.name}</option>
+                                    ))}
+                                </select>
+                            </section>
+                            
+                            <section className="schedule-creator-button-container">
+                                <button onClick={() => {
+                                    CreateSchedule(selectedMovieID);
+                                    console.log('Schedule Data:', selectedDate); // For debugging purposes
+                                }}>
+                                    Add New Schedule
+                                </button>
+                            </section>        
+
+                        </div>
+                        
                     </PopupPage>
                 )}
     

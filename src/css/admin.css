@@ -11,8 +11,8 @@
     position: relative;
     background-color: var(--background);
     border-radius: 0px 0px 25px 25px;
-    border: solid black 2px;
-    box-shadow: 0px 0px 10px 10px #000000;
+    border: solid var(--color-black) 2px;
+    box-shadow: 0px 0px 10px 10px var(--color-black);
 }
 
 .page-admin-movie-box:hover .page-admin-movie-box-name {
@@ -60,4 +60,91 @@
 .page-admin-movie-box:Hover {
     cursor: pointer;
 
+}
+
+
+.schedule-creator-container {
+    background-color: var(--color-black);
+    padding: 20px;
+    margin: var(--margin);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.schedule-creator-time-container label {
+    color: var(--text-color);
+    font-family: var(--font);
+    font-size: large;
+}
+
+
+.schedule-creator-time-container input {
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--background);
+    padding:5px;
+    border-radius: 10px;
+}
+
+.schedule-creator-time-container input:hover {
+    cursor: pointer;
+}
+
+
+.schedule-creator-date-container label {
+    color: var(--text-color);
+    font-family: var(--font);
+    font-size: large;
+}
+
+
+.schedule-creator-date-container input {
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--background);
+    padding:5px;
+    border-radius: 10px;
+}
+
+.schedule-creator-date-container input:hover {
+    cursor: pointer;
+}
+
+.schedule-creator-Hall-container label {
+    color: var(--text-color);
+    font-family: var(--font);
+    font-size: large;
+}
+
+
+.schedule-creator-Hall-container select {
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--background);
+    padding:5px;
+    border-radius: 10px;
+}
+
+.schedule-creator-Hall-container select:hover {
+    cursor: pointer;
+}
+
+.schedule-creator-button-container button {
+    font-size: large;
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--color-light-red);
+    padding:10px;
+    border-radius: 10px;
+    border:none;
+
+}
+
+.schedule-creator-button-container button:hover {
+    background-color: var(--color-red);
+    cursor: pointer;
 }

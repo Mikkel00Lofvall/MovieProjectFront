@@ -3,10 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Base64ToURL } from "../global/functions.js"
+import PopupPage from "../components/popup";
+import TicketPage from "./TicketPage";
 
 const HomePage = () => {
     let [loading, setLoading] = useState(true); 
     let [movies, setData] = useState([]);
+
+    let [selectedMovieID, setSelectedMovieID] = useState(0);
+    let [scheduleData, setScheduleData] = useState([]);
+    const [isScheduleOpen, setIsScheduleOpen] = useState(false); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,6 +40,28 @@ const HomePage = () => {
 
     const MovieContainerRef = React.useRef(null);
 
+    const FetchSchedulesByMovieID = async (movieID) => {
+        try {
+            let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
+            if (!response.ok) {
+                console.log("Network was not okay!")
+                return
+            }
+
+            if (response == "No Schedules for this movie!") {
+                console.log("No Schedules for this movie!")
+            }
+            let result = await response.json();
+
+            setScheduleData(result);
+            console.log("Schedule Data:", result);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const scrollUp = () => {
         if (MovieContainerRef.current) {
             MovieContainerRef.current.scroll({
@@ -55,8 +83,10 @@ const HomePage = () => {
 
 
     let moviesShownList = movies.map(function(movie) {
+
         return ( 
             <section className="movie-box" key={movie.key}>
+
                 <img className="movie-image" src={movie.frontPageImage} alt={movie.name} />
                 <div className="movie-desc-box">
                     <h3 className="movie-box-name">{movie.name}</h3>
@@ -67,10 +97,13 @@ const HomePage = () => {
                                 <Link to={`/read-more/${movie.key}`} className="movie-button-bundle-link">Read More</Link>
                             </nav>
                         </div>
-                        <div className="movie-box-button">
-                            <nav>
-                                <Link to="/" className="movie-button-bundle-link">Buy Tickets</Link>
-                            </nav>
+                        <div className="movie-box-button" onClick={() => {
+                            setIsScheduleOpen(!isScheduleOpen);
+                            setScheduleData([]);
+                            FetchSchedulesByMovieID(movie.key);
+                            setSelectedMovieID(movie.key);
+                        }}>
+                            Buy Tickets
                         </div>
                     </div>
                 </div>
@@ -86,6 +119,13 @@ const HomePage = () => {
 
     return (
         <div className="page-home-frame">
+            {isScheduleOpen && (
+                <PopupPage onClose={() => {
+                    setIsScheduleOpen(false);
+                }}>
+                    <TicketPage fetchedData={scheduleData} movieID={selectedMovieID} />
+                </PopupPage>
+            )}
             <section className="flex-box-home-page">
                 <div className="left-curtain"></div>
                 <div className="content-container">

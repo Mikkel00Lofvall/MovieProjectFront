@@ -70,6 +70,7 @@
     flex-wrap: wrap;
     background-color: transparent;
     margin: var(--margin);
+    z-index: 100;
 }
 
 .scroll-button-up {
@@ -128,8 +129,8 @@
     position: relative;
     background-color: var(--background);
     border-radius: 0px 0px 25px 25px;
-    border: solid black 2px;
-    box-shadow: 0px 0px 10px 10px #000000;
+    border: solid var(--color-black) 2px;
+    box-shadow: 0px 0px 10px 10px var(--color-black);
 }
 
 .movie-box:hover .movie-box-name {
@@ -203,3 +204,5 @@
     color: var(--text-color);
     top:100%;
 }
+
+

@@ -4,7 +4,6 @@
 
 
 .schedule-container {
-    margin-top: 20px;
     padding: 15px;
     background-color: transparent;
     border-radius: 8px;
@@ -14,6 +13,23 @@
     max-width: 1000px;
 }
 
+.week-navigation button {
+    padding: var(--padding);
+    margin: var(--margin);
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--color-light-red);
+    border:none;
+    font-size: large;
+    border-radius: 10px;
+    width: 150px;
+}
+
+.week-navigation button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+}
+
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
@@ -21,14 +37,14 @@
 }
 
 .schedule-table th, .schedule-table td {
-    border: 1px solid black;
+    border: 1px solid var(--color-black);
     padding: 10px;
     text-align: center;
     width: 100px; /* Set a fixed width for columns */
 }
 
 .schedule-table th {
-    background-color: black;
+    background-color: var(--color-black);
     color: white;
 }
 

@@ -18,8 +18,9 @@
 .popup-modal-content {
   color: var(--text-color);
   background-color: var(--background);
-  padding: 20px;
+  padding: 10px;
   border-radius: 15px;
+  border:none;
   
   /* Let the width and height scale based on content */
   max-width: 90%; /* Prevents content from being too wide */
@@ -40,4 +41,27 @@
   font-size: 24px;
   cursor: pointer;
   color: var(--color-red);
+}
+
+.popup-close-button {
+  position: absolute; /* Position absolute to keep it on top */
+  top: 10px; /* Space from the top */
+  right: 15px; /* Space from the right */
+  font-size: large;
+  height: 40px;
+  width: 100px;
+  border-radius: 25px;
+  color: var(--text-color);
+  font-family: var(--font);
+  background-color: var(--color-light-red);
+  margin: 0; /* Remove margin to avoid pushing content */
+  padding: var(--padding);
+  border: none;
+  z-index: 9999; /* Ensure it is above the modal content */
+  background-size: cover;
+}
+
+.popup-close-button:hover {
+  cursor: pointer;
+  background-color: var(--color-red);
 }

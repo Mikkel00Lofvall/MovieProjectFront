@@ -9,10 +9,7 @@ import ScheduleTable from "../components/schedule";
 
 const TicketPage = ( { fetchedData, MovieID } ) => {
   return (
-
-    <div>
-        <ScheduleTable scheduleData={fetchedData} schedulelink={"/seat-selector/"}></ScheduleTable>
-    </div>
+    <ScheduleTable scheduleData={fetchedData} schedulelink={"/seat-selector/"}></ScheduleTable>
   );
 };
 
