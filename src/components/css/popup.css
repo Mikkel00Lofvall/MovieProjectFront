@@ -61,6 +61,24 @@
   background-size: cover;
 }
 
+.popup-close-button-icon-version {
+  position: absolute; /* Position absolute to keep it on top */
+  top: 10px; /* Space from the top */
+  right: 0px; /* Space from the right */
+  font-size: large;
+  height: 40px;
+  width: 40px;
+  color: var(--color-light-red);
+  font-family: var(--font);
+  margin: 5px; /* Remove margin to avoid pushing content */
+  padding: var(--padding);
+  border: none;
+  z-index: 9999; /* Ensure it is above the modal content */
+  background-size: cover;
+}
+
+
+
 .popup-close-button:hover {
   cursor: pointer;
   background-color: var(--color-red);
