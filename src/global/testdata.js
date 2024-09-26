@@ -79,7 +79,8 @@ const GetMovieAndScheduleByIDTest = {
   hall: {
     id: 1,
     name: "Hall 1",
-    seats: [
+    seats: 
+    [
       {
         id: 1,
         isTaken: false,
@@ -89,7 +90,7 @@ const GetMovieAndScheduleByIDTest = {
       },
       {
         id: 2,
-        isTaken: false,
+        isTaken: true,
         rowName: "A",
         rowNumber: 2,
         hallId: 1
@@ -250,7 +251,7 @@ const GetMovieAndScheduleByIDTest = {
       },
       {
         id: 25,
-        isTaken: false,
+        isTaken: true,
         rowName: "D",
         rowNumber: 1,
         hallId: 1
@@ -306,7 +307,7 @@ const GetMovieAndScheduleByIDTest = {
       },
       {
         id: 33,
-        isTaken: false,
+        isTaken: true,
         rowName: "E",
         rowNumber: 1,
         hallId: 1
@@ -362,7 +363,7 @@ const GetMovieAndScheduleByIDTest = {
       },
       {
         id: 41,
-        isTaken: false,
+        isTaken: true,
         rowName: "F",
         rowNumber: 1,
         hallId: 1
@@ -528,6 +529,62 @@ const GetMovieAndScheduleByIDTest = {
         rowNumber: 8,
         hallId: 1
       },
+      {
+        id: 65,
+        isTaken: true,
+        rowName: "I",
+        rowNumber: 1,
+        hallId: 1
+      },
+      {
+        id: 66,
+        isTaken: true,
+        rowName: "I",
+        rowNumber: 2,
+        hallId: 1
+      },
+      {
+        id: 67,
+        isTaken: true,
+        rowName: "I",
+        rowNumber: 3,
+        hallId: 1
+      },
+      {
+        id: 68,
+        isTaken: true,
+        rowName: "I",
+        rowNumber: 4,
+        hallId: 1
+      },
+      {
+        id: 69,
+        isTaken: false,
+        rowName: "I",
+        rowNumber: 5,
+        hallId: 1
+      },
+      {
+        id: 70,
+        isTaken: true,
+        rowName: "I",
+        rowNumber: 6,
+        hallId: 1
+      },
+      {
+        id: 71,
+        isTaken: true,
+        rowName: "I",
+        rowNumber: 7,
+        hallId: 1
+      },
+      {
+        id: 72,
+        isTaken: true,
+        rowName: "I",
+        rowNumber: 8,
+        hallId: 1
+      }
     ],
     seatsOnRow: 8
 
