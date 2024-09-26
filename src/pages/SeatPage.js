@@ -13,12 +13,13 @@ const SeatPage = () => {
     let { scheduleID } = useParams();
     let [selectedSeatIds, setSelectedSeatIds] = useState([]);
     let [selectedAmountOfTickets, setAmountOfTickets] = useState(0);
+    let [ticketMissMatchError, setMissMatchError] = useState("");
 
     // FOR TESTING PURPOSE ONLY! ////////////////////////////////////
     
-    /*
+    
         useEffect(() => {
-            const FetchScheduleAndMovieByID = async (id) => {
+            const FetchScheduleAndMovieByID = async () => {
                 try {
                     setData(TestData.GetMovieAndScheduleByIDTest)
                     console.log(TestData.GetMovieAndScheduleByIDTest)
@@ -32,11 +33,11 @@ const SeatPage = () => {
 
             FetchScheduleAndMovieByID(scheduleID);
             }, [scheduleID])
-    */
+    
 
     /////////////////////////////////////////////////////////////////
 
-
+    /*
     useEffect(() => {
         const FetchScheduleAndMovieByID = async (id) => {
             try {
@@ -59,7 +60,7 @@ const SeatPage = () => {
         FetchScheduleAndMovieByID(scheduleID);
      }, [scheduleID])
 
-
+    */
 
     if (loading) return (
         <div className="page-seat-frame">
@@ -82,6 +83,7 @@ const SeatPage = () => {
             seatTag.style.backgroundColor = "green"
         })
         selectedSeatIds = []
+        setMissMatchError("")
         
         if (selectedAmountOfTickets > 0) {
             let seatTag = document.getElementById(seatId)
@@ -91,23 +93,79 @@ const SeatPage = () => {
     
             let currentSeatID = seatId;
             let seatsPerRow = FetchedData.hall.seatsOnRow;
-    
+            let currentColumn = 1;
+
             for (let i = 1; i < selectedAmountOfTickets; i++) {
                 let nextSeatID = currentSeatID + seatsPerRow; 
                 
-                if (nextSeatID > FetchedData.hall.seats.length) {  
-                    nextSeatID = nextSeatID - FetchedData.hall.seats.length;
+
+                if (nextSeatID > FetchedData.hall.seats.length) {
+
+                    currentColumn += (nextSeatID - FetchedData.hall.seats.length)
+                    currentSeatID = currentColumn;
+                    FetchedData.hall.seats.forEach(function(seat) {
+                        if (currentSeatID == seat.id) {
+                            if (!seat.isTaken) {
+                                selectedSeatIds.push(seat.id)
+                                seatTag = document.getElementById(seat.id);
+                                seatTag.style.backgroundColor = "yellow";
+                            } 
+
+                            else i -= 1
+                        }
+                        else if (currentColumn == seat.id) {
+                            if (!seat.isTaken) {
+                                selectedSeatIds.push(seat.id)
+                                seatTag = document.getElementById(seat.id);
+                                seatTag.style.backgroundColor = "yellow";
+                            }
+
+                            else i -= 1
+                        }
+
+                    })
+
+    
+                    currentSeatID = currentColumn;
+
+                    continue
                 }
-    
-                selectedSeatIds.push(nextSeatID);
-    
-                seatTag = document.getElementById(nextSeatID);
-                seatTag.style.backgroundColor = "yellow";
-    
-                currentSeatID = nextSeatID;
+
+                FetchedData.hall.seats.forEach(function(seat) {
+                    if (seat.id == nextSeatID) {
+                        if (!seat.isTaken) {
+                            selectedSeatIds.push(nextSeatID);
+                            seatTag = document.getElementById(nextSeatID);
+                            seatTag.style.backgroundColor = "yellow";
+                        }
+
+                        else {
+                            if ((nextSeatID + seatsPerRow) > FetchedData.hall.seats.length) {
+                                nextSeatID = nextSeatID - FetchedData.hall.seats.length
+                                i -= 1
+                            }
+                            else nextSeatID = nextSeatID + seatsPerRow;
+                        }
+                    }
+
+                    currentSeatID = nextSeatID;
+                })
+
+                console.log("Next Seat ID: ", nextSeatID)
+                console.log("Calculated Next Seat ID: ", currentSeatID)
             }
     
             setSelectedSeatIds(selectedSeatIds);
+            let uniqueArray = [];
+            selectedSeatIds.forEach(value => {
+                if (!uniqueArray.includes(value)) {
+                    uniqueArray.push(value);
+                }
+            });
+
+            if (uniqueArray.length != selectedAmountOfTickets) {
+                setMissMatchError("The amount of seats selected does not match the amount of tickets selected, we advise to select a different seat location!")
+            }
             console.log("Seats Selected IDs: ", selectedSeatIds);
         }
 
@@ -127,6 +185,7 @@ const SeatPage = () => {
             <div
                 id = {seat.id}
                 key={seat.id}
+                title={`Seat ID: ${seat.id} Seat Row: ${seat.rowName}`}
                 className='page-seat-div'
                 onClick={() => handleSeatClick(seat.id)}
                 style={{
@@ -153,6 +212,8 @@ const SeatPage = () => {
                 <section className='page-seat-selector-container'>
                     <h3>Select Seat Amount</h3>
                     <input type="number" value={selectedAmountOfTickets} onChange={(e) => handleTicketInputAmountChange(e)}></input>
+                    <br></br>
+                    <label className='page-seat-ticket-amount-error' style={{color: 'red'}}>{ticketMissMatchError}</label>
                     <h3>Price: {calculatedPrice}</h3>
                 </section>
             </div>
