@@ -2,7 +2,7 @@
 
 const NoPage = () => {
     return (
-      <div>
+      <div style={{ paddingTop: '60px' } }>
         <h2>404: Page does not exist</h2>
       </div>
       
