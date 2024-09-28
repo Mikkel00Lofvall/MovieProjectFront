@@ -37,7 +37,7 @@
 .popup-modal-close-button {
   position: absolute;
   top: 10px;
-  right: 15px;
+  left: 15px;
   font-size: 24px;
   cursor: pointer;
   color: var(--color-red);
@@ -46,7 +46,7 @@
 .popup-close-button {
   position: absolute; /* Position absolute to keep it on top */
   top: 10px; /* Space from the top */
-  right: 15px; /* Space from the right */
+  left: 15px; /* Space from the right */
   font-size: large;
   height: 40px;
   width: 100px;
@@ -64,7 +64,7 @@
 .popup-close-button-icon-version {
   position: absolute; /* Position absolute to keep it on top */
   top: 10px; /* Space from the top */
-  right: 0px; /* Space from the right */
+  left: 0px; /* Space from the right */
   font-size: large;
   height: 40px;
   width: 40px;

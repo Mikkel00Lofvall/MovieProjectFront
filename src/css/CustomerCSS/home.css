@@ -1,4 +1,4 @@
-@import './BaseVariables.css';
+@import '../BaseVariables.css';
 
 .page-home-frame {
     overflow: hidden;
@@ -18,7 +18,7 @@
     right: 0;
     top: 0;
     height: 100%;
-    background: url('../images/right-curtain-trans.png') no-repeat;
+    background: url('../../images/right-curtain-trans.png') no-repeat;
     background-size: cover;
     width: 20%;
     z-index: 200;
@@ -29,7 +29,7 @@
     left: 0;
     top: 0;
     height: 100%;
-    background: url('../images/left-curtain-trans.png') no-repeat;
+    background: url('../../images/left-curtain-trans.png') no-repeat;
     background-size: cover;
     width: 20%;
     z-index: 200;

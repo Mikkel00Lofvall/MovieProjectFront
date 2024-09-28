@@ -3,8 +3,8 @@
 
 
 
-import "../css/ticket.css"
-import ScheduleTable from "../components/schedule";
+import "../../css/CustomerCSS/ticket.css"
+import ScheduleTable from "../../components/schedule"
 
 
 const TicketPage = ( { fetchedData, MovieID } ) => {

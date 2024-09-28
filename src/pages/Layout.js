@@ -28,14 +28,14 @@ const Layout = () => {
             </div>
 
           </nav>
-          <div className="flex-item">
-            <div className="login-button" onClick={() => {
-              setIsLoginPopupOpen(!isLoginPopupOpen);
-            }}>
-              <label>Some Page</label>
-              <i class="bi bi-file-lock"></i>
+          <nav className="flex-item">
+            <div className="home-button">
+              <Link to="/admin" className="header-link">
+                <label>Admin</label>
+                <i class="bi bi-house"></i>
+              </Link>
             </div>
-          </div>
+          </nav>
           <div className="flex-item">
             <div className="login-button" onClick={() => {
               setIsLoginPopupOpen(!isLoginPopupOpen);

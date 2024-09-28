@@ -1,0 +1,589 @@
+.page-admin-frame {
+    padding-top: 60px;
+    overflow: auto;
+}
+
+.page-admin-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-admin-tool-button-bundle {
+    margin: var(--margin);
+    padding: var(--padding);
+}
+
+.page-admin-tool-button-bundle button {
+    font-size: large;
+    width: 150px;
+    height: 50px;
+    border-radius: 10px;
+    color: var(--color-black);
+}
+
+.page-admin-tool-button-bundle button:hover {
+    cursor: pointer;
+}
+
+.page-admin-tool-button-create {
+    background-color: #04fc84;
+}
+
+.page-admin-tool-button-create:hover {
+    background-color: #05a95c;
+}
+
+.page-admin-movies-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    flex:5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Intial Stuff for Creating a new movie */
+
+.admin-page-create-container {
+    margin: var(--margin);
+    padding: var(--padding);
+    max-width: 600px;
+    height: 600px;
+}
+
+.show-scrollbar {
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+}
+
+.show-scrollbar::-webkit-scrollbar {
+    display: block;
+    background-color: var(--color-black);
+    width: 15px;
+    border-radius: 10px;
+}
+
+.show-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-hover); 
+    border-radius: 10px;
+}
+
+.show-scrollbar::-webkit-scrollbar-track {
+    background-color: var(--color-black); 
+    border-radius: 10px;
+}
+
+.show-scrollbar::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}
+
+.admin-page-create-intial-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr; 
+    gap: 20px 20px;
+    align-items: center; 
+    max-width: 600px; 
+    margin: 20px; 
+
+}
+
+.admin-page-create-intial-item {
+    display: contents; 
+}
+
+.admin-page-create-intial-item label {
+    grid-column: 1 / 2;
+    text-align: right; 
+    font-size: large;
+}
+
+.admin-page-create-intial-item textarea,
+.admin-page-create-intial-item input {
+    grid-column: 2 / 3;
+    width: 90%;
+    padding: 5px; 
+    box-sizing: border-box; 
+    border: none;
+    resize: none;
+    border-radius: 10px;
+    background-color: var(--color-black);
+    color: var(--text-color)
+}
+
+.admin-page-create-intial-item textarea {
+    height: 100px;
+    resize: none;
+}
+
+.page-admin-create-movie-button {
+    background-color: var(--color-light-red);
+    border: none;
+    border-radius: 10px;
+    padding: var(--padding);
+    margin: var(--margin);
+    height: 40px;
+    width: 200px;
+    color: var(--text-color);
+    font-size: x-large;
+}
+
+.page-admin-create-movie-button:hover {
+    background-color: var(--color-red);
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CSS for Selecting the Front Page Image when creating Movies */
+
+.admin-page-create-frontimage-container {
+    display: flex;
+    align-items: center;
+    margin: var(--margin);
+    position: relative;
+}
+
+.admin-page-create-frontimage-scaledivs-container {
+    padding: 3px;
+    position: relative;
+    top: 50%;
+    z-index: 9999;
+    height: 50px;
+    width: 35px;
+    background-color: transparent;
+    border: transparent;
+}
+
+
+.admin-page-create-frontimage-apply-container {
+    width: 500px;
+    height: 400px;
+    background-color: var(--color-black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-admin-create-frontimage {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: var(--color-black);
+    border: none;
+}
+
+.admin-page-image-controls-frontpage-image.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+
+
+.admin-page-image-controls-frontpage-image.bottom-left {
+    position: absolute;
+    bottom: 1px;
+    left: 50px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
+
+
+.admin-page-create-frontimage-upload-icon {
+    color: white;
+    cursor: pointer;
+}
+
+.admin-page-create-frontimage-upload-icon:hover {
+    color: #04fc84;
+}
+
+
+.admin-page-create-frontimage-delete-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 5px;
+}
+
+.admin-page-create-frontimage-delete-button:hover {
+    color: red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* CSS for Selecting Movie Images when creating a move */
+
+.admin-page-create-images-container {
+    display: flex;
+    align-items: center;
+    margin: var(--margin);
+}
+
+.admin-page-create-images-container input {
+    position:absolute;
+    right: 25%;
+    bottom:40%;
+
+}
+
+.admin-page-create-images-container {
+    display: flex;
+    align-items: center;
+    margin: var(--margin);
+    position: relative;
+}
+
+.admin-page-create-scroll-container {
+    width: 600px;
+    height: 400px;
+    background-color: var(--color-black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-page-create-scroll-container img {
+    width: 100%; 
+    height: 100%;
+    object-fit: contain;
+    background-color: var(--color-black);
+}
+
+.admin-page-image-controls-images.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+}
+
+.admin-page-image-controls-images.bottom-left {
+    position: absolute;
+    bottom: 1px;
+    left: 50px;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-page-create-images-upload-icon {
+    color: white;
+    cursor: pointer;
+}
+
+.admin-page-create-images-upload-icon.small {
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.admin-page-create-images-upload-icon:hover {
+    color: #04fc84;
+}
+
+
+.admin-page-create-images-delete-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transform: none;
+}
+
+.admin-page-create-images-delete-button:hover {
+    color: red;
+}
+
+
+.admin-page-create-images-container button {
+    font-size: xx-large;
+    padding: 3px;
+    text-align: center;
+    position: relative;
+    z-index: 9999;
+    height: 50px;
+    width: 50px;
+    background-color: transparent;
+    border: transparent;
+    color: white;
+}
+
+.page-admin-scroll-button-right:hover,
+.page-admin-scroll-button-left:hover {
+    color: var(--color-hover);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.page-admin-movie-box {
+    max-width: 240px;
+    min-width: 240px;
+    max-height: 500px;
+    margin:30px;
+    position: relative;
+    background-color: var(--background);
+    border-radius: 0px 0px 25px 25px;
+    border: solid var(--color-black) 2px;
+    box-shadow: 0px 0px 10px 10px var(--color-black);
+}
+
+.page-admin-movie-box:hover .page-admin-movie-box-name {
+    text-decoration: underline;
+
+}
+
+.page-admin-movie-box-name {
+    padding: var(--padding);
+    margin: var(--margin);
+}
+
+.page-admin-movie-box-date {
+    padding: var(--padding);
+    margin: var(--margin);
+}
+
+.page-admin-movie-image {
+    width:100%;
+    height: 70%;
+    transition: opacity 0.3s ease;
+    object-fit: cover;
+}
+
+.page-admin-movie-box:hover .movie-image {
+    opacity: 0.5;
+}
+
+.page-admin-movie-desc-box {
+    transition: background-color 0.3s ease;
+    margin: 0px var(--margin) 0px var(--margin);
+}
+
+
+
+.page-admin-movie-box-name {
+    text-decoration: none;
+    font-size: large;
+    padding: var(--padding);
+    margin: var(--margin);
+    transition: text-decoration 0.3s ease;
+}
+
+
+.page-admin-movie-box:Hover {
+    cursor: pointer;
+
+}
+
+
+.schedule-creator-container {
+    background-color: var(--color-black);
+    padding: 20px;
+    margin: var(--margin);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.schedule-creator-time-container label {
+    color: var(--text-color);
+    font-family: var(--font);
+    font-size: large;
+}
+
+
+.schedule-creator-time-container input {
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--background);
+    padding:5px;
+    border-radius: 10px;
+}
+
+.schedule-creator-time-container input:hover {
+    cursor: pointer;
+}
+
+
+.schedule-creator-date-container label {
+    color: var(--text-color);
+    font-family: var(--font);
+    font-size: large;
+}
+
+
+.schedule-creator-date-container input {
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--background);
+    padding:5px;
+    border-radius: 10px;
+}
+
+.schedule-creator-date-container input:hover {
+    cursor: pointer;
+}
+
+.schedule-creator-Hall-container label {
+    color: var(--text-color);
+    font-family: var(--font);
+    font-size: large;
+}
+
+
+.schedule-creator-Hall-container select {
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--background);
+    padding:5px;
+    border-radius: 10px;
+}
+
+.schedule-creator-Hall-container select:hover {
+    cursor: pointer;
+}
+
+.schedule-creator-button-container button {
+    font-size: large;
+    color: var(--text-color);
+    font-family: var(--font);
+    background-color: var(--color-light-red);
+    padding:10px;
+    border-radius: 10px;
+    border:none;
+
+}
+
+.schedule-creator-button-container button:hover {
+    background-color: var(--color-red);
+    cursor: pointer;
+}

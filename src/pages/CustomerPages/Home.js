@@ -1,10 +1,11 @@
-import "../css/home.css"
+import "../../css/CustomerCSS/home.css"
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Base64ToURL } from "../global/functions.js"
-import PopupPage from "../components/popup";
-import TicketPage from "./TicketPage";
+import { Base64ToURL } from "../../global/functions.js"
+import PopupPage from "../../components/popup";
+import TicketPage from "../CustomerPages/TicketPage";
+import Cookies from 'js-cookie';
 
 const HomePage = () => {
     let [loading, setLoading] = useState(true); 
@@ -12,7 +13,16 @@ const HomePage = () => {
 
     let [selectedMovieID, setSelectedMovieID] = useState(0);
     let [scheduleData, setScheduleData] = useState([]);
-    const [isScheduleOpen, setIsScheduleOpen] = useState(false); 
+    const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+    
+    const checkAuthStatus = () => {
+        const token = Cookies.get('MovieProjectCookie');
+        console.log("Cookie Value: ", !!token)
+    };
+
+    useEffect(() => {
+        checkAuthStatus();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {

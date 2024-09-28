@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect, useRef } from 'react';
-import "../css/readmore.css"
-import "../components/breakline" 
+import "../../css/CustomerCSS/readmore.css"
+import "../../components/breakline" 
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import Breakline from '../components/breakline';
-import PopupPage from '../components/popup';
-import { Base64ToURL } from '../global/functions';
-import TicketPage from './TicketPage';
+import Breakline from "../../components/breakline"
+import PopupPage from '../../components/popup';
+import { Base64ToURL } from '../../global/functions';
+import TicketPage from '../CustomerPages/TicketPage';
 
 const ReadMorePage = () => {
     let { id } = useParams();
@@ -17,6 +17,17 @@ const ReadMorePage = () => {
     let [isPopupOpen, setIsPopupOpen] = useState(false); 
     let FetchedSchedule = useRef(false);
 
+    const [ImagesForMovie, setImagesAmount] = useState([]);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const ScrollLeft = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === 0 ? ImagesForMovie.length - 1  : prevIndex - 1));
+    };
+
+    const ScrollRight = () => {
+        setCurrentIndex((prevIndex) => (prevIndex === ImagesForMovie.length - 1 ? 0 : prevIndex + 1));
+    };
+
     const togglePopup = () => {
         setIsPopupOpen(!isPopupOpen);
 
@@ -25,37 +36,7 @@ const ReadMorePage = () => {
       const closePopup = () => {
         setIsPopupOpen(false);
       };
-
-
-    const ImageContainerRef = React.useRef(null);
-    const viewportWidth = window.innerWidth;
   
-    const ScrollLeft = () => {
-        if (ImageContainerRef.current) {
-            ImageContainerRef.current.scroll({
-                left: ImageContainerRef.current.scrollLeft - viewportWidth,
-                behavior: 'smooth'
-            });
-        }
-    };
-
-    const ScrollRight = () => {
-        if (ImageContainerRef.current) {
-            const container = ImageContainerRef.current;
-            const children = Array.from(container.children);
-            
-            const excludeSelectors = '.scroll-button-left, .scroll-button-right';
-            
-            const excludedWidth = children
-                .filter(child => child.matches(excludeSelectors))
-                .reduce((total, child) => total + child.offsetWidth, 0);
-            
-            container.scroll({
-                left: container.scrollLeft + viewportWidth - excludedWidth,
-                behavior: 'smooth'
-            });
-        }
-    };
 
 
     useEffect(() => {
@@ -70,6 +51,7 @@ const ReadMorePage = () => {
                     result.imagesBlobs[i] = Base64ToURL(result.imagesBlobs[i].data)  
                 }
                 setData(result)
+                setImagesAmount(result.imagesBlobs)
             } catch (err) {
                 setError(err.message)
             } finally {
@@ -102,11 +84,6 @@ const ReadMorePage = () => {
     };
 
 
-
-
-
-
-
     if (loading) return (
         <div className="page-read-more-frame">
             <h2>Loading</h2>
@@ -137,13 +114,6 @@ const ReadMorePage = () => {
         );
     })
 
-    let movieImages = movie.imagesBlobs.map(function(blob) {
-        return (
-            <img src={blob} alt="Random Image 1" className='page-read-movie-image' />
-        );
-    });
-
-
 
     return (
         <div className="page-read-more-frame" onLoad={() => {
@@ -159,27 +129,29 @@ const ReadMorePage = () => {
                 </PopupPage>
             )}
             <h2 className="movie-name">{movie.name}</h2>
-            <div className="outer-container">
-                <button className="scroll-button-left" onClick={() => ScrollLeft()}>
-                    <i className="bi bi-arrow-left-circle"></i>
-                </button>
-
-                <div className="scroll-container" ref={ImageContainerRef}>
-                    <iframe 
-                        width="560" 
-                        height="315" 
-                        src={movie.TrailerLink} 
-                        title="The Matrix Trailer" 
-                        frameBorder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowFullScreen>
-                    </iframe>
-                    {movieImages}
+            <div className="page-read-more-scroll-container">
+                <iframe
+                    src="https://www.youtube.com/embed/9u5Y-HZ7Vf4" // Pass the iframe source here
+                    title="Movie Trailer"
+                    frameBorder="0"
+                    allowFullScreen
+                    className="iframe-style"
+                ></iframe>
+                {ImagesForMovie.length > 0 && (
+                    <img 
+                        src={ImagesForMovie[currentIndex]} 
+                        alt={`Movie Image ${currentIndex}`} 
+                        className='page-read-more-movie-image' 
+                    />
+                )}
+                <div className="image-navigation-buttons">
+                    <button className="scroll-button-left" onClick={ScrollLeft}>
+                        <i className="bi bi-arrow-left-circle"></i>
+                    </button>
+                    <button className="scroll-button-right" onClick={ScrollRight}>
+                        <i className="bi bi-arrow-right-circle"></i>
+                    </button>
                 </div>
-
-                <button className="scroll-button-right" onClick={() => ScrollRight()}>
-                    <i className="bi bi-arrow-right-circle"></i>
-                </button>
             </div>
 
             <section>

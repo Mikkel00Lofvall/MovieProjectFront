@@ -1,4 +1,4 @@
-@import './BaseVariables.css';
+@import '../BaseVariables.css';
 
 .page-read-more-frame {
     padding-top: 60px;
@@ -16,36 +16,37 @@
 
 
 
-.outer-container {
-    position: relative;
-    width: 100%;
-}
 
-.scroll-container {
+.page-read-more-scroll-container {
+    width: 100%; 
+    height: 400px; 
+    background-color: black;
     display: flex;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    white-space: nowrap;
-    width: 100%;
-    align-items: center;
-    scroll-behavior: smooth;
+    justify-content: center; 
+    align-items: center; 
+    overflow: hidden;
 }
 
-.scroll-container iframe,
-.scroll-container img {
+.page-read-more-scroll-container img {
     width: 100%;
-    height: 500px;
-    flex-shrink: 0;
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
+    background-color: black;
 }
 
-.scroll-button-right,
-.scroll-button-left {
+
+
+.page-read-more-scroll-container iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.image-navigation-buttons button {
     font-size: xx-large;
     padding: 3px;
     text-align: center;
-    position: absolute;
-    top: 50%; /* Vertical center */
+    position: relative;
+    top: 40%;
     transform: translateY(-50%);
     z-index: 1;
     height: 50px;
@@ -59,12 +60,12 @@
     right: 10px;
 }
 
-.scroll-button-right:hover {
-    color:var(--color-hover)
+.scroll-button-left {
+    right: 10px;
 }
 
-.scroll-button-left {
-    left: 10px;
+.scroll-button-right:hover {
+    color:var(--color-hover)
 }
 
 .scroll-button-left:hover {

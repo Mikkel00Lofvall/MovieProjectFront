@@ -3,8 +3,35 @@ import React, { useState } from "react";
 
 const LoginComponent = () => {
 
-    const [showPassword, setShowPassword] = React.useState("password");
-    let loginResult = false;
+    const [showPassword, setShowPassword] = useState("password");
+    let [passwordVar, setPassword] = useState(null);
+    let [emailVar, setEmail] = useState(null);
+    let [loginResult, setLoginResult] = useState(false);
+    
+    const Login = async () => {
+        if (emailVar != null && passwordVar != null) {
+            let response = await fetch("https://localhost:7296/api/Account/login", {
+                method: "POST",
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                body: JSON.stringify({username: emailVar, password: passwordVar})
+            });
+            
+            if (response.ok) {
+                console.log("logged in succesfully");
+                setLoginResult(true);
+            } else {
+                let errorMessage = await response.text();
+                console.error("Error creating movie:", errorMessage);
+                
+            }
+        }
+
+        else console.log("Email or Password was null")
+    }
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => (prev === "password" ? "text" : "password"));
@@ -28,13 +55,19 @@ const LoginComponent = () => {
             </div>
             <div className="login-flex-container">
                 <section className="login-input-container">
-                    <label>Username:</label>
-                    <input></input>
+                    <label>Email:</label>
+                    <input onChange={(e) => {
+                        setEmail(e.target.value)
+                        console.log("Email: ", emailVar)
+                    }}></input>
                 </section>
                 <section className="login-input-container">
                     <label>Password:</label>
                     <div className="login-input-password-container">
-                    <input type={showPassword} />
+                    <input type={showPassword} onChange={(e) => {
+                        setPassword(e.target.value)
+                        console.log("Password: ", passwordVar)
+                    }}/>
                         <button onClick={togglePasswordVisibility}>
                             {showPassword === "password" ? (
                                 <i className="bi bi-eye-slash-fill"></i>
@@ -46,7 +79,7 @@ const LoginComponent = () => {
 
                 </section>
                 <section className="login-input-container">
-                    <button>Login</button>
+                    <button onClick={Login}>Login</button>
                 </section>
             </div>
             

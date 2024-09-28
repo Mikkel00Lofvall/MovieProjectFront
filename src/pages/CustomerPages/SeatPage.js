@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
-import "../css/seat.css";
-import { Base64ToURL } from '../global/functions';
+import "../../css/CustomerCSS/seat.css";
+import { Base64ToURL } from '../../global/functions';
 
-import TestData from "../global/testdata.js"
+import TestData from "../../global/testdata.js"
 
 const SeatPage = () => {
     let calculatedPrice = 100;
@@ -17,7 +17,7 @@ const SeatPage = () => {
 
     // FOR TESTING PURPOSE ONLY! ////////////////////////////////////
     
-    
+    /*
         useEffect(() => {
             const FetchScheduleAndMovieByID = async () => {
                 try {
@@ -34,10 +34,10 @@ const SeatPage = () => {
             FetchScheduleAndMovieByID(scheduleID);
             }, [scheduleID])
     
-
+    */
     /////////////////////////////////////////////////////////////////
 
-    /*
+    
     useEffect(() => {
         const FetchScheduleAndMovieByID = async (id) => {
             try {
@@ -60,7 +60,7 @@ const SeatPage = () => {
         FetchScheduleAndMovieByID(scheduleID);
      }, [scheduleID])
 
-    */
+    
 
     if (loading) return (
         <div className="page-seat-frame">
@@ -187,7 +187,11 @@ const SeatPage = () => {
                 key={seat.id}
                 title={`Seat ID: ${seat.id} Seat Row: ${seat.rowName}`}
                 className='page-seat-div'
-                onClick={() => handleSeatClick(seat.id)}
+                onClick={() => {
+                    if (!seat.isTaken) {
+                        handleSeatClick(seat.id)
+                    }
+                }}
                 style={{
                     backgroundColor: seat.isTaken 
                         ? 'red'
