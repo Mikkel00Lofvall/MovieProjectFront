@@ -33,6 +33,9 @@ const AdminMenu = () => {
                     <li>
                         <a href="/admin/RoomPanel">Cinema Room Panel</a>
                     </li>
+                    <li>
+                        <a href="/admin/themes">Themes Panel</a>
+                    </li>
                 </ul>
             </div>
         </div>

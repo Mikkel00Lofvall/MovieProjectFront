@@ -139,9 +139,11 @@ const HomePage = () => {
             <section className="flex-box-home-page">
                 <div className="left-curtain"></div>
                 <div className="content-container">
-                    <div className="movies-container" id="movies-container" ref={MovieContainerRef}>
-                            {moviesShownList}
-                    </div>
+                    <main className="show-scrollbar">
+                        <div className="movies-container" id="movies-container" ref={MovieContainerRef}>
+                                {moviesShownList}
+                        </div>
+                    </main>
                     <section className="scroll-button-bundle">
                         <button onClick={() => scrollUp()} className="scroll-button-up" >
                             <i class="bi bi-arrow-up-circle"></i>

@@ -78,8 +78,8 @@
 
 .info-container {
     display: flex;
-    justify-content: space-between;
-    gap: 100px;
+    justify-content: space-around;
+    gap: 300px
 }
 
 .info-container section {
@@ -94,6 +94,14 @@
     width: 40%;
 }
 
+.movie-information-container {
+    width: 40%;
+    display: flex;
+    gap: 50px;
+    flex-direction: column;
+}
+
+.themes-header,
 .description-header,
 .details-header {
     margin: 5px 0;
@@ -101,6 +109,14 @@
 } 
 
 .movie-description-container {
+    color:var(--text-color);
+    margin:var(--margin);
+    padding:var(--padding);
+    font-size: x-large;
+    max-height: 200px;
+}
+
+.movie-themes-container {
     color:var(--text-color);
     margin:var(--margin);
     padding:var(--padding);

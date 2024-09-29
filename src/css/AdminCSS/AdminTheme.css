@@ -1,0 +1,92 @@
+@import '../BaseVariables.css';
+
+.page-admin-themes-create-container {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    margin: 40px 20px 20px 20px;
+    padding: var(--padding);
+    justify-content: center;
+}
+
+.page-admin-themes-create-container label {
+    font-size: large;
+}
+
+.page-admin-themes-create-container button {
+    padding: var(--padding);
+    margin: var(--margin);
+    font-size: large;
+    background-color: var(--color-light-red);
+    border: none;
+    color: var(--text-color);
+    border-radius: 10px;
+}
+
+.page-admin-themes-create-container button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+}
+
+.page-admin-themes-create-input-container {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.page-admin-themes-create-input-container input {
+    border-radius: 10px;
+    background-color: var(--color-black);
+    padding: 10px;
+    color: var(--text-color);
+}
+
+.page-admin-themes-create-input-container input:hover {
+    background-color: rgb(38, 38, 38);
+    cursor: pointer;
+}
+
+.page-admin-theme-grid-container {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    padding: 10px;
+    margin: var(--margin);
+    gap:20px;
+  }
+  
+  .page-admin-theme-grid-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 500px;
+    height: 100px;
+    gap: 100px;
+    background-color: var(--color-hover);
+  }
+
+
+
+  .page-admin-theme-theme-container label {
+    color:var(--text-color);
+    font-size: x-large;
+  }
+
+  .page-admin-theme-button-bundle-container button {
+    color: var(--text-color);
+    border-radius: 10px;
+    border: none;
+    background-color: var(--color-light-red);
+    width: 200px;
+    height: 40px;
+  }
+
+  .page-admin-theme-button-bundle-container button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+  }

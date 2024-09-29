@@ -6,31 +6,42 @@ import "../../css/AdminCSS/AdminMovie.css"
 import Cookies from 'js-cookie'
 import AdminMenu from "../../components/adminMenu";
 import Breakline from "../../components/breakline"
-import { isVisible } from "@testing-library/user-event/dist/utils";
+import { Link } from "react-router-dom";
 
 const AdminMoviePage = () => {
     let [selectedMovieID, setSelectedMovieID] = useState(0);
-    let [scheduleData, setScheduleData] = useState([]);
+
     let [movieNameInput, setMovieName] = useState("");
     let [movieDescInput, setMovieDesc] = useState("");
     let [movieDurationInput, setMovieDuration] = useState(0);
     let [imageBlobs, setImageBlobs] = useState([]);
 
     let [dateString, setDateString] = useState('');
-    let [CinemaHalls, setCinemaHalls] = useState(null)
+
     let [CinemaName, setCinemaName] = useState("")
     let [loading, setLoading] = useState(true); 
-    let [movies, setMoviesData] = useState([]);
     let [SelectedHall, setSelectedHall] = useState(0)
     let [RowAmount, setRowAmount] = useState(0)
     let [SeatsOnARow, setSeatOnARow] = useState(0)
     let [selectedDate, setSelectedDate] = useState({});
     let [selectedTime, setSelectedTime] = useState('');
     let [frontPageImageUpload, SetFrontPageImage] = useState(null)
+    let [checkedThemeIds, setCheckedThemeIds] = useState([]);
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    //Fetched Data
+    let [movies, setMoviesData] = useState([]);
+    let [CinemaHalls, setCinemaHalls] = useState(null)
+    let [scheduleData, setScheduleData] = useState([]);
+    let [FetchedThemes, setFetchedThemes] = useState([]);
+    let [FetchedMovieThemes, setFetchedMovieThemes] = useState();
+
+    //details Page
+    const [activeViewIndex, setActiveIndex] = useState(null);
+
     // Popup Controls
+    const [isThemeMenuOpen, setIsThemeOpen] = useState(false);
     const [isScheduleOpen, setIsScheduleOpen] = useState(false); 
     const [isMovieCreateOpen, setIsMovieCreateOpen] = useState(false); 
 
@@ -117,9 +128,52 @@ const AdminMoviePage = () => {
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
 
+    
+    const FetchAllThemes = async () => {
+        try {
+            let response = await fetch('https://localhost:7296/api/Theme/GetThemes');
+            if (!response.ok) {
+                console.log("Network was not okay!")
+                return
+            }
+
+            let result = await response.json();
+
+            setFetchedThemes(result);
+            console.log("Theme Data:", result);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false);
+        }
+
+    };
+
+    const FetchThemesFromMovie = async (movieID) => {
+        try {
+            let response = await fetch(`https://localhost:7296/api/Theme/GetThemesWithMovieID/${movieID}`);
+            if (!response.ok) {
+                console.log("Network was not okay!")
+                return
+            }
+
+            let result = await response.json();
+
+            let themeIds = result.map(theme => theme.id);
+            setCheckedThemeIds(themeIds);
+            console.log("Movie Theme Data:", themeIds);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoading(false);
+        }
+
+    };
+
 
     useEffect(() => {
         checkAuthStatus();
+        FetchAllThemes();
     }, []);
 
     if (loading) return (
@@ -141,7 +195,8 @@ const AdminMoviePage = () => {
             movieDurationInput > 0 && 
             imageBlobs.length > 0 && 
             frontPageImageUpload != null &&
-            dateString != ""
+            dateString != "" &&
+            MovieTrailerInput != ""
         ) 
         {
             let newMovieData = {
@@ -244,6 +299,10 @@ const AdminMoviePage = () => {
     };
 
 
+
+
+
+
     const handleDateChange = (event) => {
 
         let dateValue = new Date(event.target.value);
@@ -252,8 +311,28 @@ const AdminMoviePage = () => {
         setDateString(FromDateToString(dateValue));
     };
 
-
-
+    
+    const UpdateMovieWithThemes = async (movieID) => {
+        console.log("Selected Themes", checkedThemeIds)
+        if (checkedThemeIds.length > 0) {
+            let response = await fetch(`https://localhost:7296/api/Theme/UpdateMovieWithThemes/${movieID}`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({themeIDs: checkedThemeIds})
+            });
+            
+            if (response.ok) {
+                console.log("movie updated themes successfully");
+  
+            } else {
+                let errorMessage = await response.text();
+                console.error("Error creating movie:", errorMessage);
+                
+            }
+        }
+    }
 
 
     const CreateHall = async () => {
@@ -305,16 +384,103 @@ const AdminMoviePage = () => {
 
     }
 
+
+    const toggleSlide = (index) => {
+        if (activeViewIndex === index) {
+          setActiveIndex(null);
+        } else {
+          setActiveIndex(index);
+        }
+      };
+
+      const HandleThemeCheckBoxChange = (themeID) => {
+        setCheckedThemeIds((prevSelectedThemes) => {
+            if (prevSelectedThemes.includes(themeID)) {
+                return prevSelectedThemes.filter(id => id !== themeID);
+            } else {
+                return [...prevSelectedThemes, themeID];
+            }
+        });
+    };
+
+    const CheckIfMovieHasTheme = (themeID) => {
+        if (checkedThemeIds.includes(themeID)) return true
+        else return false
+    }
+
+    let ThemesList = FetchedThemes.map((theme) => {
+        return (
+            <div key={theme.id}>
+                <div className="page-admin-theme-table-cell">
+                    <label>{theme.name}</label>
+                    <input 
+                    type="checkbox" 
+                    onChange={() => {
+                        HandleThemeCheckBoxChange(theme.id)
+                        console.log("Current Selected Themes: ", checkedThemeIds)
+                    }} 
+                    defaultChecked={CheckIfMovieHasTheme(theme.id)} />
+                </div>
+            </div>
+        );
+
+    });
+
     let moviesShownList = movies.map((movie) => {
         return ( 
             <section id={movie.key} className="page-admin-movie-box" key={movie.key} onClick={() => {
-                setIsScheduleOpen(!isScheduleOpen);
                 setScheduleData([]);
                 FetchSchedulesByMovieID(movie.key);
                 setSelectedMovieID(movie.key);
+                if (isThemeMenuOpen == false) {
+                    toggleSlide(movie.key);
+                    FetchThemesFromMovie(movie.key);
+                }
             }}>
-                {isScheduleOpen && (
+                <div key={movie.key} className={`page-admin-movie-details-view-container ${activeViewIndex === movie.key ? 'active' : ''}`}>
+                    {isThemeMenuOpen && (
+                        <PopupPage isCloseButtonIcon={true} onClose={() => {
+                                setIsThemeOpen(false);
+                            }}>
+                                <main className="page-admin-theme-container">
+                                    <section className="table-grid">
+                                        <div className="table-header">Themes</div>
+                                        <Breakline></Breakline>
+                                    </section>
+                                    {ThemesList}
+                                    <br></br>
+                                    <div className="page-admin-theme-button-bundle">
+                                        <button onClick={(event) => {
+                                            event.stopPropagation();
+                                            UpdateMovieWithThemes(movie.key);
+                                        }}>Update</button>
+                                    </div>
 
+                                </main>
+                        </PopupPage>
+                    )}
+                    <section className={`page-admin-movie-details-view-button-bundle ${activeViewIndex === movie.key ? 'active' : ''}`} >
+                        <button onClick={(e) => {
+                            e.stopPropagation();
+                            setIsScheduleOpen(!isScheduleOpen)
+                        }} className={`${activeViewIndex === movie.key ? 'active' : ''}`}>See Schedule</button>
+                        <button onClick={(e) => {
+                            e.stopPropagation();
+                            setIsThemeOpen(true)
+                        }} className={`${activeViewIndex === movie.key ? 'active' : ''}`}>Theme Menu</button>
+<                       div className={`${activeViewIndex === movie.key ? 'active' : ''}`}>
+                            <nav>
+                                <Link to={`/read-more/${movie.key}`} className="movie-button-bundle-link">Read More</Link>
+                            </nav>
+                        </div>  
+                        <button className={`${activeViewIndex === movie.key ? 'active' : ''}`} onClick={(e) => {
+                            e.stopPropagation();
+                        }}>Delete</button>
+                    </section>
+
+                </div>
+                {isScheduleOpen && (
+                    
                     <PopupPage onClose={() => {
                         setIsScheduleOpen(false);
                     }}>
@@ -391,6 +557,7 @@ const AdminMoviePage = () => {
                         </div>
                         
                     </PopupPage>
+
                 )}
     
                 <img className="page-admin-movie-image" src={movie.frontPageImage} alt={movie.name} />
@@ -463,6 +630,9 @@ const AdminMoviePage = () => {
 
 
 
+
+
+
     return (
         <div className="page-admin-frame">
             {isMovieCreateOpen && (
@@ -493,6 +663,11 @@ const AdminMoviePage = () => {
                                     <label>Duration in Minutes:</label>
                                     <input type="number" value={movieDurationInput} onChange={(e) => setMovieDuration(e.target.value)} />
                                 </div>
+
+                                <div className="admin-page-create-intial-item">
+                                    <label>Trailer Link</label>
+                                    <input type="text" value={MovieTrailerInput} onChange={(e) => setMovieTrailer(e.target.value)} />
+                                </div>
                                 
                                 <div className="admin-page-create-intial-item">
                                     <label>Rating:</label>
@@ -501,12 +676,12 @@ const AdminMoviePage = () => {
 
                                 <div className="admin-page-create-intial-item">
                                     <label>Studio:</label>
-                                    <input type="number" value={movieRatingInput } onChange={(e) => setMovieStudio(e.target.value)} />
+                                    <input type="text" value={ MovieStudioInput } onChange={(e) => setMovieStudio(e.target.value)} />
                                 </div>
 
                                 <div className="admin-page-create-intial-item">
                                     <label>Directed By:</label>
-                                    <input type="number" value={movieRatingInput } onChange={(e) => setMovieDirected(e.target.value)} />
+                                    <input type="text" value={ MovieDirectedInput } onChange={(e) => setMovieDirected(e.target.value)} />
                                 </div>
                                 
                                 <div className="admin-page-create-intial-item">

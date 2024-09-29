@@ -1,0 +1,41 @@
+@import '../BaseVariables.css';
+
+.page-admin-room-container {
+
+}
+
+
+.show-scrollbar {
+    overflow: auto;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.show-scrollbar::-webkit-scrollbar {
+    display: block;
+    background-color: var(--color-black);
+    width: 15px;
+    border-radius: 10px;
+}
+
+.show-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-hover); 
+    border-radius: 10px;
+}
+
+.show-scrollbar::-webkit-scrollbar-track {
+    background-color: var(--color-black); 
+    border-radius: 10px;
+}
+
+.show-scrollbar::-webkit-scrollbar-thumb:hover {
+    cursor: pointer;
+}
+
+
+.fake-box {
+    width: 80%;
+    height: 400px;
+    background-color: var(--color-black);
+}

@@ -13,12 +13,19 @@ const ReadMorePage = () => {
     let [scheduleData, setScheduleData] = useState([]);
     let [movie, setData] = useState(null);
     let [error, setError] = useState(null);
-    let [loading, setLoading] = useState(true);
+
     let [isPopupOpen, setIsPopupOpen] = useState(false); 
     let FetchedSchedule = useRef(false);
+    let [FetchedThemesForMovie, setFetchedThemesForMovie] = useState([]);
 
     const [ImagesForMovie, setImagesAmount] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
+
+
+    // Loading Dock
+    let [LoadingSchedules, setLoadingSchedules] = useState(true);
+    let [LoadingThemes, setLoadingThemes] = useState(true);
+    let [LoadingMovie, setLoadingMovie] = useState(true);
 
     const ScrollLeft = () => {
         setCurrentIndex((prevIndex) => (prevIndex === 0 ? ImagesForMovie.length - 1  : prevIndex - 1));
@@ -36,28 +43,58 @@ const ReadMorePage = () => {
       const closePopup = () => {
         setIsPopupOpen(false);
       };
-  
+
+      const FetchThemesFromMovie = async () => {
+        try {
+            let response = await fetch(`https://localhost:7296/api/Theme/GetThemesWithMovieID/${id}`);
+            if (!response.ok) {
+                console.log("Network was not okay!")
+                return
+            }
+
+            let result = await response.json();
+
+            setFetchedThemesForMovie(result);
+            console.log("Movie Theme Data:", result);
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoadingThemes(false);
+        }
+
+    };
+
+    useEffect(() => {
+
+
+        FetchThemesFromMovie();
+    }, [id])
+
+    const fetchData = async () => {
+        try {
+            let response = await fetch(`https://localhost:7296/api/Movie/GetMovieWithId/${id}`);
+            if (!response) {
+                throw new Error("Network was not okay!")
+            }
+            let result = await response.json()
+            for (let i = 0; i < result.imagesBlobs.length; i++) {
+                result.imagesBlobs[i] = Base64ToURL(result.imagesBlobs[i].data)  
+            }
+            setData(result)
+            setImagesAmount(result.imagesBlobs)
+            console.log("Movie Data: ", result)
+        } catch (err) {
+            setError(err.message)
+        } finally {
+            setLoadingMovie(false)
+        }
+    };
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let response = await fetch(`https://localhost:7296/api/Movie/GetMovieWithId/${id}`);
-                if (!response) {
-                    throw new Error("Network was not okay!")
-                }
-                let result = await response.json()
-                for (let i = 0; i < result.imagesBlobs.length; i++) {
-                    result.imagesBlobs[i] = Base64ToURL(result.imagesBlobs[i].data)  
-                }
-                setData(result)
-                setImagesAmount(result.imagesBlobs)
-            } catch (err) {
-                setError(err.message)
-            } finally {
-                setLoading(false)
-            }
-        };
+
+
+
 
         fetchData();
     }, [id]);
@@ -67,9 +104,11 @@ const ReadMorePage = () => {
     }, [id])
 
 
-    const FetchSchedulesByMovieID = async (movieID) => {
+
+
+    const FetchSchedulesByMovieID = async () => {
         try {
-            let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
+            let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${id}`);
             if (!response.ok) {
                 console.log("Network was not okay!")
             }
@@ -79,27 +118,41 @@ const ReadMorePage = () => {
         } catch (err) {
             console.log(err)
         } finally {
-            setLoading(false);
+            setLoadingSchedules(false);
         }
     };
 
-
-    if (loading) return (
-        <div className="page-read-more-frame">
-            <h2>Loading</h2>
-        </div>
-    );
     if (error) return (        
         <div className="page-read-more-frame">
             <h2>Error</h2>
         </div>
     );
 
+    if (LoadingMovie || LoadingThemes) {
+        console.log("------------- Load Dock -------------");
+        console.log(" Schedules: ", LoadingSchedules);
+        console.log(" Movie: ", LoadingMovie);
+        console.log(" Themes: ", LoadingThemes);
+        console.log("------------- Load Dock -------------");
+        return (
+            <div className="page-read-more-frame">
+                <h2>Loading</h2>
+            </div>
+        );
+    }
+
+    
+    const ThemesList = FetchedThemesForMovie.map(theme => {
+        return (
+            <label>{theme.name}, </label>
+        );
+    });
+
     const formatDetailName = (detailName) => {
         return detailName
           .replace(/([a-z])([A-Z])/g, '$1 $2')
           .replace(/\b\w/g, (char) => char.toUpperCase());
-      };
+    };
 
     let detailsContainers = Object.entries(movie.details).map(([detailName, detailValue]) => {
         return (
@@ -107,7 +160,7 @@ const ReadMorePage = () => {
             <Breakline></Breakline>
                 <div className='details-container'>
                     <h3 className='detail-name'>{formatDetailName(detailName)}</h3>
-                    <h3 className='detail-value'>{detailValue ? detailValue : 'N/A'}</h3>
+                    <h3 className='detail-value'>{detailValue ? detailValue : 'Not Givin'}</h3>
                 </div>
             </div>
 
@@ -160,11 +213,21 @@ const ReadMorePage = () => {
                         <h3 className='details-header'>Details</h3>
                         {detailsContainers}
                     </section>
-                    <section className='movie-description-container'>
-                        <h3 className='description-header'>Description</h3>
-                        <Breakline></Breakline>
-                        <label>{movie.description}</label>
-                    </section>
+                    <div className='movie-information-container'>
+                        <section className='movie-description-container'>
+                            <h3 className='description-header'>Description</h3>
+                            <Breakline></Breakline>
+                            <label>{movie.description}</label>
+                            <br></br>
+                        </section>
+                        <section className='movie-themes-container'>
+                            <h3 className='themes-header'>Themes</h3>
+                            <Breakline></Breakline>
+                            <div>{ThemesList}</div>
+                            <br></br>
+                        </section>
+                    </div>
+
                 </div>
                 <div className="ticket-button-container">
                     <div className="ticket-button" onClick={togglePopup}>

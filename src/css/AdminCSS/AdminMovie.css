@@ -1,3 +1,5 @@
+@import '../BaseVariables.css';
+
 .page-admin-frame {
     padding-top: 60px;
     overflow: auto;
@@ -500,6 +502,172 @@
     cursor: pointer;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Controls For Movie Boxes */
+
+.page-admin-movie-details-view-container {
+    padding: var(--padding);
+    position: absolute;
+    z-index: 200;
+    left:100%;
+    box-shadow: 0px 0px 10px 5px rgb(189, 0, 0);
+    width: 0px;
+    height: 100%;
+    background-color: var(--color-black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease;
+    visibility: hidden;
+    font-size: larger;
+
+}
+
+.page-admin-movie-details-view-container.active {
+    width: 300px;
+    height: 100%;
+    visibility: visible;
+    position: absolute;
+    z-index: 200;
+    transition: all 0.5s ease;
+  }
+
+  .page-admin-movie-details-view-button-bundle {
+    visibility: hidden;
+  }
+  
+  .page-admin-movie-details-view-button-bundle.active {
+    visibility: visible;
+    display: flex;
+    flex-direction: column;
+    gap:60px;
+  }
+
+  .page-admin-movie-details-view-button-bundle div,
+  .page-admin-movie-details-view-button-bundle button {
+    visibility: hidden;
+  }
+
+  .page-admin-movie-details-view-button-bundle div.active,
+  .page-admin-movie-details-view-button-bundle button.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--padding);
+    visibility: visible;
+    font-size: large;
+    border-radius: 10px;
+    height: 40px;
+    width: 200px;
+    color: var(--text-color);
+    background-color: var(--color-light-red);
+    border:none;
+    font-family: var(--font);
+    
+  }
+
+  .page-admin-movie-details-view-button-bundle div:hover,
+  .page-admin-movie-details-view-button-bundle button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.page-admin-theme-container {
+    margin: 30px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: x-large;
+}
+
+.page-admin-theme-table-cell {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+    gap: 10px;
+    font-size: x-large;
+}
+
+.page-admin-theme-table-cell label {
+    flex: 1; /* Allows the label to take up available space */
+    white-space: nowrap; /* Prevents text wrapping */
+    overflow: hidden; /* Hides overflow text */
+    text-overflow: ellipsis; /* Adds ellipsis for long text */
+}
+
+.page-admin-theme-table-cell input {
+    width: 20px;
+    height: 20px;
+}
+
+.page-admin-theme-table-cell input:hover {
+    cursor: pointer;
+}
+
+
+.page-admin-theme-button-bundle button {
+    border-radius: 10px;
+    border: none;
+    background-color: var(--color-light-red);
+    width: 200px;
+    height: 40px;
+    color: var(--text-color);
+    font-size: large;
+}
+
+
+.page-admin-theme-container button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 .schedule-creator-container {
