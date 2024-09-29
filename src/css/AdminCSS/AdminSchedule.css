@@ -1,0 +1,79 @@
+@import '../BaseVariables.css';
+
+
+.page-admin-schedule-container {
+    display: flex;
+    flex-direction: row;
+    padding: 20px 50px;
+    justify-content: space-around;
+    height: 70vh;
+    gap:100px;
+
+}
+
+.page-admin-schedule-image-container {
+}
+
+.page-admin-schedule-image-container img {
+    border: solid var(--color-black) 2px;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 0px 10px 10px var(--color-black);
+    background-color: var(--color-black);
+}
+
+
+
+
+
+
+.page-admin-schedule-details-container {
+    width: 600px;
+}
+
+.page-admin-schedule-movie-name-header {
+    left: 10px;
+}
+
+.page-admin-schedule-details-flex-container {
+    margin: 10px;
+    padding: var(--padding);
+    display: flex;
+    flex-direction: column;
+
+}
+
+.page-admin-schedule-details-button-bundle button {
+    border-radius: 10px;
+    background-color: var(--color-light-red);
+    cursor: pointer;
+    width: 200px;
+    height: 40px;
+    border:none;
+    color: var(--text-color);
+    font-size: large;
+}
+
+.page-admin-schedule-details-button-bundle button:hover {
+    background-color: var(--color-red);
+}
+
+.page-admin-schedule-details-grid {
+    margin: 10px;
+    padding: var(--padding);
+    display: flex;
+    flex-direction: column;
+    grid-gap: 20px;
+}
+
+.page-admin-schedule-details-grid-item {
+    display: flex;
+    gap: 15px;
+    flex-direction: row;
+    font-size: large;
+}
+
+.page-admin-schedule-details-button-bundle {
+    
+}

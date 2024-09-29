@@ -178,7 +178,7 @@ const ReadMorePage = () => {
         }}>
             {isPopupOpen && (
                 <PopupPage onClose={closePopup}>
-                    <TicketPage fetchedData={scheduleData}></TicketPage>
+                    <TicketPage fetchedData={scheduleData} link={"/seat-selector/"}></TicketPage>
                 </PopupPage>
             )}
             <h2 className="movie-name">{movie.name}</h2>

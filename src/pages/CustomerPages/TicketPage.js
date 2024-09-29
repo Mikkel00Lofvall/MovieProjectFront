@@ -7,9 +7,9 @@ import "../../css/CustomerCSS/ticket.css"
 import ScheduleTable from "../../components/schedule"
 
 
-const TicketPage = ( { fetchedData, MovieID } ) => {
+const TicketPage = ( { fetchedData, link } ) => {
   return (
-    <ScheduleTable scheduleData={fetchedData} schedulelink={"/seat-selector/"}></ScheduleTable>
+    <ScheduleTable scheduleData={fetchedData} schedulelink={link}></ScheduleTable>
   );
 };
 

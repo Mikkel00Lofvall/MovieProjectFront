@@ -335,27 +335,6 @@ const AdminMoviePage = () => {
     }
 
 
-    const CreateHall = async () => {
-        if (CinemaName != "" && RowAmount > 0 && SeatsOnARow > 0) {
-            let response = await fetch("https://localhost:7296/api/CinemaHall/CreateHall", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({name: CinemaName, rowAmount: RowAmount, seatsOnARow: SeatsOnARow})
-            });
-            
-            if (response.ok) {
-                console.log("Hall created successfully");
-                GetCinemaHalls();
-  
-            } else {
-                let errorMessage = await response.text();
-                console.error("Error creating movie:", errorMessage);
-                
-            }
-        }
-    }
 
     const CreateSchedule = async (movieID) => {
         if (SelectedHall != null && selectedDate != null && movieID != null) {
@@ -484,7 +463,7 @@ const AdminMoviePage = () => {
                     <PopupPage onClose={() => {
                         setIsScheduleOpen(false);
                     }}>
-                        <TicketPage fetchedData={scheduleData} />
+                        <TicketPage fetchedData={scheduleData} link={"/admin/schedule/"} />
                         <div className="schedule-creator-container">
                             <section className="schedule-creator-time-container">
                                 <label>Time: </label>
@@ -817,28 +796,6 @@ const AdminMoviePage = () => {
             <main className="page-admin-movies-container">
                 {moviesShownList}
             </main>
-
-
-
-        
-            <br></br>
-            <h2>Create CinemaHall</h2>
-            <div>
-                <label>Name</label>
-                <br></br>
-                <input type="text" onChange={(e) => setCinemaName(e.target.value)}></input>
-                <br></br>
-                <label>Seat Rows</label>
-                <br></br>
-                <input type="number" onChange={(e) => setRowAmount(e.target.value)}></input>
-                <br></br>
-                <label>Seats In On a Row</label>
-                <br></br>
-                <input type="number" onChange={(e) => setSeatOnARow(e.target.value)}></input>
-                <br></br>
-                <br></br>
-                <button onClick={CreateHall} >Create CinemaHall</button>
-            </div>
         </div>
     );
 }

@@ -133,7 +133,7 @@ const HomePage = () => {
                 <PopupPage onClose={() => {
                     setIsScheduleOpen(false);
                 }}>
-                    <TicketPage fetchedData={scheduleData} movieID={selectedMovieID} />
+                    <TicketPage fetchedData={scheduleData} link={"/seat-selector/"} movieID={selectedMovieID} />
                 </PopupPage>
             )}
             <section className="flex-box-home-page">

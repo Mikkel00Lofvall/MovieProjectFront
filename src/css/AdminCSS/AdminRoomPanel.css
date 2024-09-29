@@ -1,7 +1,61 @@
 @import '../BaseVariables.css';
 
 .page-admin-room-container {
+    display: flex;
+    flex-direction: column;
+    gap:100px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
 
+.page-admin-room-create-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 300px; 
+    margin:30px 20px 20px 20px; 
+}
+
+.page-admin-room-create-item,
+.page-admin-room-create-container section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.page-admin-room-create-container label {
+    font-weight: bold;
+}
+
+.page-admin-room-create-container input {
+    background-color: var(--color-black);
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 10px;
+    color: var(--text-color)
+}
+
+.page-admin-room-create-item-button-bundle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.page-admin-room-create-item-button-bundle button {
+    border-radius: 10px;
+    height: 40px;
+    width: 200px;
+    background-color: var(--color-light-red);
+    color: var(--text-color);
+    border: none;
+    font-size: large;
+}
+
+.page-admin-room-create-item-button-bundle button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
 }
 
 
@@ -34,8 +88,45 @@
 }
 
 
-.fake-box {
-    width: 80%;
-    height: 400px;
-    background-color: var(--color-black);
+
+
+
+
+.page-admin-hall-container {
+    border-radius: 10px;
+    width: 60%;
+    height: 200px;
+    background-color: var(--color-hover);
+    margin: 20px;
+    padding: 20px;
+    box-shadow: 0px 0px 10px 10px var(--color-black);
+}
+
+.page-admin-hall-details {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+
+.page-admin-hall-button-bundle {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.page-admin-hall-button-bundle button {
+    border-radius: 10px;
+    border: none;
+    width: 150px;
+    height: 40px;
+    padding: var(--padding);
+    color: var(--text-color);
+    background-color: var(--color-light-red);
+    font-size: large;
+
+}
+
+.page-admin-hall-button-bundle button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
 }
