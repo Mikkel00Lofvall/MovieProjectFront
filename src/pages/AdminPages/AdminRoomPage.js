@@ -60,8 +60,10 @@ const AdminRoomPage = () => {
     
         if (response.headers.get('Content-Type')?.includes('application/json')) {
             window.addToast(`Deleted Room Successfully`, "success", 4000)
+			GetCinemaHalls()
         } else {
             window.addToast(`Deleted Room Successfully`, "success", 4000)
+			GetCinemaHalls()
         }
 
     };
@@ -108,7 +110,18 @@ const AdminRoomPage = () => {
 					<section className="page-admin-hall-button-bundle">
 						<button>See Schedules</button>
 						<button onClick={() => {
-							DeleteCinemaHall(hall.id)
+							const buttons = [
+								{
+									label: "Yes",
+									action: () => DeleteCinemaHall(hall.id)
+								},
+								{
+									label: "No",
+									action: () => {}
+								}
+							];
+							
+							window.addToast(`This cannot be undone \n are you sure?`, "warning", 100000, buttons);
 						}}>Delete</button>
 					</section>
 				</section>

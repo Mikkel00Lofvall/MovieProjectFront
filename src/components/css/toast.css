@@ -7,32 +7,35 @@
     right: 20px;
     z-index: 9999;
     width: 400px;
-    height: 100px;
+    height: 150px;
     padding: 16px 0px;
     border-radius: 5px;
     transition: opacity 0.5s ease, transform 0.5s ease;
     background-color: var(--color-hover);
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+    gap: 20px;
 }
 
-.toast-icon-success {
-    color:#00c62e;
-}
-
-
-.toast-icon-error {
-    color:#dc3545;
-}
 
 .toast-success {
     border: #00c62e solid 5px;
 }
 
+.toast-warning {
+    border:#FFA500 solid 5px;
+}
+
+
 .toast-error {
     border: #dc3545 solid 5px;
+}
+
+.toats-flex-box {
+    display: flex;
+    flex-direction: row;
 }
 
 .toast-flex-item {
@@ -59,6 +62,40 @@
     width: 70%;
     height: 100%;
     font-size: 24px;
+}
+
+.toast-button-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.toast-button-container button {
+    border-radius: 10px;
+    border: none;
+    width: 100px;
+    height: 30px;
+    color: var(--text-color);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.toast-button-yes {
+    background-color: #28a745; /* Base green */
+}
+
+.toast-button-yes:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+.toast-button-no {
+    background-color: #dc3545; /* Base red */
+}
+
+.toast-button-no:hover {
+    background-color: #c82333; /* Darker red on hover */
 }
 
 .toast-enter {

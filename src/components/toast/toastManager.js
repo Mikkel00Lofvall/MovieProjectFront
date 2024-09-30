@@ -5,9 +5,9 @@ import "../css/toastManager.css"
 const ToastManager = () => {
     const [toasts, setToasts] = useState([]);
 
-    window.addToast = (message, type="error", duration) => {
+    window.addToast = (message, type="error", duration, buttons) => {
         const id = Math.random().toString(36).substring(7);
-        setToasts(prevToasts => [...prevToasts, { id, message, type, duration }])
+        setToasts(prevToasts => [...prevToasts, { id, message, type, duration, buttons }])
 
         setTimeout(() => {
             setToasts(prevToasts => prevToasts.filter(t => t.id !== id));
@@ -25,6 +25,7 @@ const ToastManager = () => {
                             message={toast.message}
                             type={toast.type}
                             duration={toast.duration}
+                            buttons={toast.buttons}
                             onClose={() => setToasts(prevToasts => prevToasts.filter(t => t.id !== toast.id))}
                         ></Toast>
                     );

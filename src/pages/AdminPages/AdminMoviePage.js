@@ -31,6 +31,12 @@ const AdminMoviePage = () => {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    // Load Dock
+    let [LoadingMovies, setLoadingMovies] = useState(true);
+    let [LoadingCinemaHalls, setLoadingHalls] = useState(true);
+    let [LoadingSchedule, setLoadingSchedule] = useState(true);
+    let [LoadingThemes, setLoadingThemes] = useState(true);
+
     //Fetched Data
     let [movies, setMoviesData] = useState([]);
     let [CinemaHalls, setCinemaHalls] = useState(null)
@@ -86,7 +92,7 @@ const AdminMoviePage = () => {
             console.log(err)
             window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
-            setLoading(false)
+            setLoadingMovies(false)
         }
     };
 
@@ -106,7 +112,7 @@ const AdminMoviePage = () => {
             let errorMessage = await err.text();
             window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
-            setLoading(false)
+            setLoadingHalls(false)
         }
     };
 
@@ -148,7 +154,7 @@ const AdminMoviePage = () => {
             let errorMessage = await err.text();
             window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
-            setLoading(false);
+            setLoadingThemes(false);
         }
 
     };
@@ -181,11 +187,21 @@ const AdminMoviePage = () => {
         FetchAllThemes();
     }, []);
 
-    if (loading) return (
-        <div className="page-admin-frame">
-            <label>Loading</label>
-        </div>
-    );
+    if (LoadingCinemaHalls || LoadingMovies || LoadingThemes) {
+        console.log("--------- Load Dock ---------");
+        console.log(" Halls: ", LoadingCinemaHalls);
+        console.log(" Movies: ", LoadingMovies);
+        console.log(" Themes: ", LoadingThemes);
+        console.log("--------- Load Dock ---------");
+
+        return (
+            <div className="page-admin-frame">
+                <label>Loading</label>
+            </div>
+        );
+    }
+
+
 
     /*if (!isAuthenticated) {
         return (
@@ -235,6 +251,7 @@ const AdminMoviePage = () => {
                 if (response.ok) {
                     console.log("");
                     window.addToast(`Movie created successfully`, "success", 4000)
+                    GetMovies();
 
                     
                     
@@ -360,6 +377,8 @@ const AdminMoviePage = () => {
             
             if (response.ok) {
                 window.addToast(`Schedule created successfully`, "success", 4000)
+                FetchSchedulesByMovieID(movieID)
+                
     
             } else {
                 let errorMessage = await response.text();

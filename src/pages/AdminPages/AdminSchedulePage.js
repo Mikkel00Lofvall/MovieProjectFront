@@ -5,38 +5,21 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Base64ToURL } from "../../global/functions";
 import ToastManager from "../../components/toast/toastManager";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 
 const AdminSchedulePage = () => {
     const { id } = useParams();
 
     let [FetchedScheduleData, setFetchedScheduleData] = useState(null)
-
+    const navigate = useNavigate();
 
     //Loading dock
 
     let [LoadingFetchedScheduleData, setLoadingFetchedScheduleData] = useState(true);
 
-
-    const DeleteSchedule = async (scheduleID) => {
-        let response = await fetch(`https://localhost:7296/api/Schedule/DeleteSchedule/${scheduleID}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    
-        if (!response.ok) {
-            let errorMessage = await response.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
-        }
-    
-        if (response.headers.get('Content-Type')?.includes('application/json')) {
-            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
-        } else {
-            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
-        }
-
+    const handleRedirect = (pageURL) => {
+        navigate(pageURL);
     };
 
     const FetchScheduleByID = async () => {
@@ -58,6 +41,32 @@ const AdminSchedulePage = () => {
             setLoadingFetchedScheduleData(false);
         }
     };
+
+
+    const DeleteSchedule = async (scheduleID) => {
+        let response = await fetch(`https://localhost:7296/api/Schedule/DeleteSchedule/${scheduleID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    
+        if (!response.ok) {
+            let errorMessage = await response.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+        }
+    
+        if (response.headers.get('Content-Type')?.includes('application/json')) {
+            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
+            handleRedirect("/admin");
+        } else {
+            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
+            handleRedirect("/admin");
+        }
+
+    };
+
+    
 
     useEffect(() => {
         FetchScheduleByID();
@@ -120,7 +129,19 @@ const AdminSchedulePage = () => {
 
                         </section>
                         <div className="page-admin-schedule-details-button-bundle">
-                            <button onClick={() => {DeleteSchedule(FetchedScheduleData.schedule.id)}}>Delete</button>
+                            <button onClick={() => {
+                                const buttons = [
+                                    {
+                                        label: 'Yes',
+                                        action: () => { DeleteSchedule(FetchedScheduleData.schedule.id) }
+                                    },
+                                    {
+                                        label: 'No',
+                                        action: () => {}
+                                    }
+                                ];
+                                 window.addToast(`This cannot be undone \n are you sure?`, "warning", 100000, buttons)
+                                }}>Delete</button>
                         </div>
                     </article>
                 </section>

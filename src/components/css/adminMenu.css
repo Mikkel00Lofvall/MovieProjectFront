@@ -2,7 +2,7 @@
 
 
 .adminmenu {
-    z-index: 9999;
+    z-index: 9997;
     position: fixed;
     top:60px;
     width: 250px;
