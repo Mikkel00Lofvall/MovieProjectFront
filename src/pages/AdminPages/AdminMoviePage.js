@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import AdminMenu from "../../components/adminMenu";
 import Breakline from "../../components/breakline"
 import { Link } from "react-router-dom";
+import ToastManager from "../../components/toast/toastManager";
 
 const AdminMoviePage = () => {
     let [selectedMovieID, setSelectedMovieID] = useState(0);
@@ -83,6 +84,7 @@ const AdminMoviePage = () => {
             console.log(result)
         } catch (err) {
             console.log(err)
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
             setLoading(false)
         }
@@ -101,7 +103,8 @@ const AdminMoviePage = () => {
             setCinemaHalls(result)
             console.log(result)
         } catch (err) {
-            console.log(err)
+            let errorMessage = await err.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
             setLoading(false)
         }
@@ -142,7 +145,8 @@ const AdminMoviePage = () => {
             setFetchedThemes(result);
             console.log("Theme Data:", result);
         } catch (err) {
-            console.log(err)
+            let errorMessage = await err.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
             setLoading(false);
         }
@@ -163,7 +167,8 @@ const AdminMoviePage = () => {
             setCheckedThemeIds(themeIds);
             console.log("Movie Theme Data:", themeIds);
         } catch (err) {
-            console.log(err)
+            let errorMessage = await err.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
             setLoading(false);
         }
@@ -228,13 +233,14 @@ const AdminMoviePage = () => {
                 });
                 
                 if (response.ok) {
-                    console.log("Movie created successfully");
+                    console.log("");
+                    window.addToast(`Movie created successfully`, "success", 4000)
 
                     
                     
                 } else {
                     let errorMessage = await response.text();
-                    console.error("Error creating movie:", errorMessage);
+                    window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
                     
                 }
 
@@ -292,7 +298,8 @@ const AdminMoviePage = () => {
             setScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            console.log(err)
+            let errorMessage = await err.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
             setLoading(false);
         }
@@ -325,11 +332,12 @@ const AdminMoviePage = () => {
             
             if (response.ok) {
                 console.log("movie updated themes successfully");
+                window.addToast(`Movie updated with themes successfully`, "success", 4000)
   
             } else {
                 let errorMessage = await response.text();
-                console.error("Error creating movie:", errorMessage);
-                
+                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+                return;
             }
         }
     }
@@ -351,11 +359,11 @@ const AdminMoviePage = () => {
             });
             
             if (response.ok) {
-                console.log("Schedule created successfully");
+                window.addToast(`Schedule created successfully`, "success", 4000)
     
             } else {
                 let errorMessage = await response.text();
-                console.error("Error creating movie:", errorMessage);
+                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
                 
             }
 
@@ -614,6 +622,7 @@ const AdminMoviePage = () => {
 
     return (
         <div className="page-admin-frame">
+            <ToastManager></ToastManager>
             {isMovieCreateOpen && (
                 <PopupPage isCloseButtonIcon={true} onClose={() => { 
                     setIsMovieCreateOpen(false)

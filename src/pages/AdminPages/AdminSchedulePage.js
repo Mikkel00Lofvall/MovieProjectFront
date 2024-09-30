@@ -4,6 +4,7 @@ import "../../css/AdminCSS/AdminSchedule.css"
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Base64ToURL } from "../../global/functions";
+import ToastManager from "../../components/toast/toastManager";
 
 
 const AdminSchedulePage = () => {
@@ -26,16 +27,14 @@ const AdminSchedulePage = () => {
         });
     
         if (!response.ok) {
-            console.log("Network request failed with status:", response.status);
-            return;
+            let errorMessage = await response.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         }
     
-        let result;
         if (response.headers.get('Content-Type')?.includes('application/json')) {
-            result = await response.json();
-            console.log("Theme Data:", result);
+            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
         } else {
-            console.log("No JSON response, theme deleted successfully.");
+            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
         }
 
     };
@@ -48,15 +47,13 @@ const AdminSchedulePage = () => {
                 return
             }
 
-            if (response == "No Schedules for this movie!") {
-                console.log("No Schedules for this movie!")
-            }
             let result = await response.json();
 
             setFetchedScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            console.log(err)
+            let errorMessage = await err.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
             setLoadingFetchedScheduleData(false);
         }
@@ -76,6 +73,7 @@ const AdminSchedulePage = () => {
 
     return (
         <div className="page-admin-frame">
+            <ToastManager></ToastManager>
             <AdminMenu></AdminMenu>
 
 

@@ -1,5 +1,6 @@
 import "./css/login.css"
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 const LoginComponent = () => {
 
@@ -7,6 +8,8 @@ const LoginComponent = () => {
     let [passwordVar, setPassword] = useState(null);
     let [emailVar, setEmail] = useState(null);
     let [loginResult, setLoginResult] = useState(false);
+
+    const navigate = useNavigate();
     
     const Login = async () => {
         if (emailVar != null && passwordVar != null) {
@@ -23,6 +26,7 @@ const LoginComponent = () => {
             if (response.ok) {
                 console.log("logged in succesfully");
                 setLoginResult(true);
+                handleRedirect();
             } else {
                 let errorMessage = await response.text();
                 console.error("Error creating movie:", errorMessage);
@@ -36,6 +40,11 @@ const LoginComponent = () => {
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => (prev === "password" ? "text" : "password"));
     };
+
+    const handleRedirect = () => {
+        navigate('/admin');
+    };
+
 
     const loginResultIcon = (loginResult) => {
         return (

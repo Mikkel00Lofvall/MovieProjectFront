@@ -3,6 +3,7 @@ import "../../css/AdminCSS/AdminRoomPanel.css"
 import Breakline from "../../components/breakline";
 import React, { useState, useEffect } from "react";
 import PopupPage from "../../components/popup";
+import ToastManager from "../../components/toast/toastManager"
 
 
 const AdminRoomPage = () => {
@@ -33,16 +34,37 @@ const AdminRoomPage = () => {
             });
             
             if (response.ok) {
-                console.log("Hall created successfully");
+                window.addToast(`Room Created Successfully`, "success", 4000)
                 GetCinemaHalls();
   
             } else {
                 let errorMessage = await response.text();
-                console.error("Error creating movie:", errorMessage);
+                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
                 
             }
         }
     }
+
+	const DeleteCinemaHall = async (id) => {
+        let response = await fetch(`https://localhost:7296/api/CinemaHall/DeleteHall/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    
+        if (!response.ok) {
+            let errorMessage = await response.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+        }
+    
+        if (response.headers.get('Content-Type')?.includes('application/json')) {
+            window.addToast(`Deleted Room Successfully`, "success", 4000)
+        } else {
+            window.addToast(`Deleted Room Successfully`, "success", 4000)
+        }
+
+    };
 
 	const GetCinemaHalls = async () => {
         try {
@@ -55,7 +77,8 @@ const AdminRoomPage = () => {
             setCinemaHalls(result)
             console.log("Fetched Halls Data: ", result)
         } catch (err) {
-            console.log(err)
+			let errorMessage = await err.text();
+			window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
         } finally {
             setLoadingFetchAllHalls(false)
         }
@@ -84,7 +107,9 @@ const AdminRoomPage = () => {
 					</section>
 					<section className="page-admin-hall-button-bundle">
 						<button>See Schedules</button>
-						<button>Delete</button>
+						<button onClick={() => {
+							DeleteCinemaHall(hall.id)
+						}}>Delete</button>
 					</section>
 				</section>
 
@@ -94,6 +119,7 @@ const AdminRoomPage = () => {
   
     return (
 		<div className="page-admin-frame">
+			<ToastManager></ToastManager>
 			{isCreatPopupOpen && (
 				<PopupPage isCloseButtonIcon={true} onClose={() => {
 					setCreatePopup(false);

@@ -15,7 +15,7 @@ h1, h2, h3, h4, h5, p, label {
     right:0;
     position: fixed;
     margin-bottom:10px;
-    z-index: 9998;
+    z-index: 9996;
     height: 50px;
 }
 
@@ -36,6 +36,28 @@ h1, h2, h3, h4, h5, p, label {
     padding: var(--padding);
 }
 
+
+.layout-logo {
+    text-decoration: none;
+    display: flex;
+    flex-direction: row;
+    gap: 5px; 
+    color: #f6c949;
+    font-family: 'Montserrat', 'Poppins', 'Open Sans', sans-serif;
+    font-size: 20px;
+}
+
+
+
+.layout-logo:hover i {
+    color:#d4a32c;
+    cursor: pointer;
+}
+
+.layout-logo:hover label {
+    color:#d4a32c;
+    cursor: pointer;
+}
 
 .header-link {
     text-decoration: none;
@@ -70,12 +92,12 @@ h1, h2, h3, h4, h5, p, label {
 
 
 .login-button:hover i {
-    color:var(--color-hover);
+    color:#d4a32c;
     cursor: pointer;
 }
 
 .login-button:hover label {
-    color:var(--color-hover);
+    color:#d4a32c;
     cursor: pointer;
 }
 

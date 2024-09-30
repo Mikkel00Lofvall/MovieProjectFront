@@ -3,6 +3,7 @@ import "../../css/AdminCSS/AdminTheme.css"
 import Breakline from "../../components/breakline";
 import React, { useState, useEffect } from "react";
 import PopupPage from "../../components/popup";
+import ToastManager from "../../components/toast/toastManager";
 
 
 const AdminThemesPage = () => {
@@ -27,15 +28,20 @@ const AdminThemesPage = () => {
                 });
 
                 if (!response.ok) {
-                    console.log("Network was not okay!")
+                    let errorMessage = await response.text();
+                    window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
                     return
                 }
 
             } catch (err) {
+                let errorMessage = await err.text();
+                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
                 console.log(err)
             } finally {
                 setLoading(false);
+                window.addToast("Theme Was Created", "success", 4000)
                 FetchAllThemes();
+
             }
         }
 
@@ -72,6 +78,8 @@ const AdminThemesPage = () => {
     
         if (!response.ok) {
             console.log("Network request failed with status:", response.status);
+            let errorMessage = await response.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
             return;
         }
     
@@ -79,8 +87,12 @@ const AdminThemesPage = () => {
         if (response.headers.get('Content-Type')?.includes('application/json')) {
             result = await response.json();
             console.log("Theme Data:", result);
+            window.addToast("Theme Was Deleted", "success", 4000)
+            FetchAllThemes();
         } else {
             console.log("No JSON response, theme deleted successfully.");
+            window.addToast("Theme Was Deleted", "success", 4000)
+            FetchAllThemes();
         }
 
     };
@@ -99,7 +111,7 @@ const AdminThemesPage = () => {
 
     return (
       <div className="page-admin-frame">
-
+        <ToastManager></ToastManager>
         {isCreatePopupOpen && (
             <PopupPage isCloseButtonIcon={true} onClose={() => {
                 setCreatePopup(false);

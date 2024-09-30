@@ -1,0 +1,72 @@
+@import '../../css/BaseVariables.css';
+
+.toast {
+    color: var(--text-color);
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 400px;
+    height: 100px;
+    padding: 16px 0px;
+    border-radius: 5px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    background-color: var(--color-hover);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.toast-icon-success {
+    color:#00c62e;
+}
+
+
+.toast-icon-error {
+    color:#dc3545;
+}
+
+.toast-success {
+    border: #00c62e solid 5px;
+}
+
+.toast-error {
+    border: #dc3545 solid 5px;
+}
+
+.toast-flex-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.toast-icon {
+    display: flex;
+    width: 60px;
+    height: 60px;
+    font-size: 60px;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+.toast-detail-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    height: 100%;
+    font-size: 24px;
+}
+
+.toast-enter {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.toast-leave {
+    opacity: 0;
+    transform: translateY(-10px);
+}
