@@ -147,7 +147,21 @@ const AdminThemesPage = () => {
                             <label>{theme.name}</label>
                         </div>
                         <div className="page-admin-theme-button-bundle-container" >
-                            <button onClick={() => {DeleteTheme(theme.id)}}>Delete</button>
+                            <button onClick={() => {
+                                const buttons = [
+                                    {
+                                        label: "Yes",
+                                        action: () => DeleteTheme(theme.id)
+                                    },
+                                    {
+                                        label: "No",
+                                        action: () => {}
+                                    }
+                                ];
+            
+                                window.addToast(`This cannot be undone \n are you sure?`, "warning", 100000, buttons);
+
+                            }}>Delete</button>
                         </div>
                     </div>
                 ))}

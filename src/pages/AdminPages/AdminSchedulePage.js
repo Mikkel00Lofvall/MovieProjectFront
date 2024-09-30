@@ -132,15 +132,16 @@ const AdminSchedulePage = () => {
                             <button onClick={() => {
                                 const buttons = [
                                     {
-                                        label: 'Yes',
-                                        action: () => { DeleteSchedule(FetchedScheduleData.schedule.id) }
+                                        label: "Yes",
+                                        action: () => DeleteSchedule(FetchedScheduleData.schedule.id)
                                     },
                                     {
-                                        label: 'No',
+                                        label: "No",
                                         action: () => {}
                                     }
                                 ];
-                                 window.addToast(`This cannot be undone \n are you sure?`, "warning", 100000, buttons)
+                                
+                                window.addToast(`This cannot be undone \n are you sure?`, "warning", 100000, buttons);
                                 }}>Delete</button>
                         </div>
                     </article>
