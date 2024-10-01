@@ -127,7 +127,7 @@ const AdminRoomPage = () => {
 					<section>
 						<h2>{hall.name}</h2>
 						<br></br>
-						<label>Size: {hall.seatsOnRow} x {hall.seats.length / hall.seatsOnRow} Seats</label>
+						<label>Size: {hall.seatsOnRow} x {hall.rowsOfSeats} Seats</label>
 					</section>
 					<section className="page-admin-hall-button-bundle">
 						<button>See Schedules</button>

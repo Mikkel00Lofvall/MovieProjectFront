@@ -26,6 +26,7 @@ const Layout = () => {
 
 				if (response.ok) {
 					setIsAuthenticated(true);
+					setIsLoginPopupOpen(false)
 				}
 	  
 			} catch (error) {
@@ -46,6 +47,7 @@ const Layout = () => {
 
             if (response.ok) {
                 setIsAuthenticated(false);
+				setIsLoginPopupOpen(false)
                 console.log("User logged out");
 				navigate("/")
             } else {

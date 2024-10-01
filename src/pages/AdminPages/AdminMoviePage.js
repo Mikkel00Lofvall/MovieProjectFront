@@ -32,10 +32,10 @@ const AdminMoviePage = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     // Load Dock
-    let [LoadingMovies, setLoadingMovies] = useState(true);
-    let [LoadingCinemaHalls, setLoadingHalls] = useState(true);
-    let [LoadingSchedule, setLoadingSchedule] = useState(true);
-    let [LoadingThemes, setLoadingThemes] = useState(true);
+    let [LoadingMovies, setLoadingMovies] = useState(false);
+    let [LoadingCinemaHalls, setLoadingHalls] = useState(false);
+    let [LoadingSchedule, setLoadingSchedule] = useState(false);
+    let [LoadingThemes, setLoadingThemes] = useState(false);
 
     //Fetched Data
     let [movies, setMoviesData] = useState([]);
@@ -197,6 +197,7 @@ const AdminMoviePage = () => {
         FetchAllThemes();
     }, []);
 
+
     if (LoadingCinemaHalls || LoadingMovies || LoadingThemes) {
         console.log("--------- Load Dock ---------");
         console.log(" Halls: ", LoadingCinemaHalls);
@@ -212,12 +213,6 @@ const AdminMoviePage = () => {
     }
 
 
-
-    /*if (!isAuthenticated) {
-        return (
-            <div style={{ padding: "60px"}}>You are not authorized admin</div>
-        );
-    }*/
 
     const CreateMovie = () => {
         if (
@@ -242,9 +237,7 @@ const AdminMoviePage = () => {
                     releaseDate: dateString,
                     rating: movieRatingInput,
                     durationInMinutes: movieDurationInput,
-                    directedBy: {
-                      name: MovieDirectedInput
-                    },
+                    directedBy: MovieDirectedInput,
                     studio: MovieStudioInput
                 },
             }
@@ -298,7 +291,7 @@ const AdminMoviePage = () => {
             result = await response.json();
             console.log("Theme Data:", result);
             window.addToast("Movie Was Deleted", "success", 4000)
-            GetMovies();
+           GetMovies();
         } else {
             console.log("No JSON response, theme deleted successfully.");
             window.addToast("Movie Was Deleted", "success", 4000)
