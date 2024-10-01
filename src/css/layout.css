@@ -25,8 +25,6 @@ h1, h2, h3, h4, h5, p, label {
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
-    margin: var(--margin);
-    padding: var(--padding);
 
 }
 
@@ -34,6 +32,12 @@ h1, h2, h3, h4, h5, p, label {
     position: relative;
     margin: var(--margin);
     padding: var(--padding);
+}
+
+.flex-admin-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
 }
 
 
@@ -59,24 +63,10 @@ h1, h2, h3, h4, h5, p, label {
     cursor: pointer;
 }
 
-.header-link {
-    text-decoration: none;
-    color: var(--text-color);
-    display: flex;
-    flex-direction: row;
-    gap: 5px; 
+
+.login-button {
+    font-size: 20px;
 }
-
-
-.header-link:hover i {
-    color: var(--color-hover);
-}
-
-.header-link:hover label {
-    color: var(--color-hover);
-}
-
-
 
 .home-button:hover {
     cursor: pointer;

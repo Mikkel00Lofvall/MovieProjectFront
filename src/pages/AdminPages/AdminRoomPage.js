@@ -4,6 +4,7 @@ import Breakline from "../../components/breakline";
 import React, { useState, useEffect } from "react";
 import PopupPage from "../../components/popup";
 import ToastManager from "../../components/toast/toastManager"
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 
 const AdminRoomPage = () => {
@@ -86,8 +87,29 @@ const AdminRoomPage = () => {
         }
     };
 
+	const navigate = useNavigate();
+	const NavigateToHome = () => {
+		navigate("/")
+	}
+
     useEffect(() => {
-        GetCinemaHalls();
+        const checkAuth = async () => {
+            try {
+                let response = await fetch('https://localhost:7296/api/Account/CheckAuth', {
+                    method: 'POST',
+                    credentials: 'include',
+                });
+        
+                if (!response.ok) {
+                    NavigateToHome()
+                } 
+            } catch (error) {
+                return false;
+            }
+
+            GetCinemaHalls();
+        }
+        checkAuth();
     }, []);
 
 	if (LoadingFetchAllHalls) {

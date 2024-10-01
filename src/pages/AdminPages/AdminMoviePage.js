@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FromDateToString, Base64ToURL } from "../../global/functions";
+import { FromDateToString, Base64ToURL, CheckAuth } from "../../global/functions";
 import PopupPage from "../../components/popup";
 import TicketPage from "../CustomerPages/TicketPage";
 import "../../css/AdminCSS/AdminMovie.css"
-import Cookies from 'js-cookie'
 import AdminMenu from "../../components/adminMenu";
 import Breakline from "../../components/breakline"
 import { Link } from "react-router-dom";
 import ToastManager from "../../components/toast/toastManager";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 const AdminMoviePage = () => {
     let [selectedMovieID, setSelectedMovieID] = useState(0);
@@ -64,7 +64,6 @@ const AdminMoviePage = () => {
     const MoviePicturesInputRef = useRef(null);
     const MovieFrontPageInputRef = useRef(null)
     
-
     const ScrollLeft = () => {
         setCurrentImageIndexAdmin((prevIndex) => (prevIndex === 0 ? selectedImages.length - 1 : prevIndex - 1));
     };
@@ -116,26 +115,38 @@ const AdminMoviePage = () => {
         }
     };
 
-    useEffect(() => {
-        GetCinemaHalls();
-    }, []);
 
-
-    useEffect(() => {
-        GetMovies();
-    }, []);
-
-
-    const checkAuthStatus = () => {
-        const myCookie = getCookie('MovieProjectCookeAuth');
-        console.log(myCookie);
-    };
-    
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
+    const navigate = useNavigate();
+    const NavigateToHome = () => {
+        navigate("/")
     }
+
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                let response = await fetch('https://localhost:7296/api/Account/CheckAuth', {
+                    method: 'POST',
+                    credentials: 'include',
+                });
+        
+                if (!response.ok) {
+                    NavigateToHome()
+                } 
+            } catch (error) {
+                return false;
+            }
+
+            GetCinemaHalls();
+            GetMovies();
+        }
+        checkAuth();
+    }, []);
+
+
+
+
+    
 
     
     const FetchAllThemes = async () => {
@@ -183,7 +194,6 @@ const AdminMoviePage = () => {
 
 
     useEffect(() => {
-        checkAuthStatus();
         FetchAllThemes();
     }, []);
 
@@ -267,6 +277,35 @@ const AdminMoviePage = () => {
             userAction()
         }
     }
+
+    const DeleteMovie = async (movieID) => {
+        let response = await fetch(`https://localhost:7296/api/Movie/DeleteMovie/${movieID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    
+        if (!response.ok) {
+            console.log("Network request failed with status:", response.status);
+            let errorMessage = await response.text();
+            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+            return;
+        }
+    
+        let result;
+        if (response.headers.get('Content-Type')?.includes('application/json')) {
+            result = await response.json();
+            console.log("Theme Data:", result);
+            window.addToast("Movie Was Deleted", "success", 4000)
+            GetMovies();
+        } else {
+            console.log("No JSON response, theme deleted successfully.");
+            window.addToast("Movie Was Deleted", "success", 4000)
+            GetMovies();
+        }
+
+    };
 
     function HandleFiles(event, callback) {
         let files = Array.from(event.target.files);
@@ -481,6 +520,18 @@ const AdminMoviePage = () => {
                         </div>  
                         <button className={`${activeViewIndex === movie.key ? 'active' : ''}`} onClick={(e) => {
                             e.stopPropagation();
+                            const buttons = [
+                                {
+                                    label: "Yes",
+                                    action: () => DeleteMovie(movie.key)
+                                },
+                                {
+                                    label: "No",
+                                    action: () => {}
+                                }
+                            ];
+        
+                            window.addToast(`This cannot be undone \n are you sure?`, "warning", 100000, buttons);
                         }}>Delete</button>
                     </section>
 

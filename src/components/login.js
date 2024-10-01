@@ -10,6 +10,14 @@ const LoginComponent = () => {
     let [loginResult, setLoginResult] = useState(false);
 
     const navigate = useNavigate();
+
+	const NavigateToHome = () => {
+		navigate("/")
+	}
+
+    const NavigateToAdmin = () => {
+        navigate("/admin")
+    }
     
     const Login = async () => {
         if (emailVar != null && passwordVar != null) {
@@ -26,7 +34,21 @@ const LoginComponent = () => {
             if (response.ok) {
                 console.log("logged in succesfully");
                 setLoginResult(true);
-                handleRedirect();
+                try {
+                    let response = await fetch('https://localhost:7296/api/Account/CheckAuth', {
+                        method: 'POST',
+                        credentials: 'include',
+                    });
+            
+                    if (!response.ok) {
+                        NavigateToHome();
+                    } 
+                    else {
+                        NavigateToAdmin();
+                    }
+                } catch (error) {
+                    return false;
+                }
             } else {
                 let errorMessage = await response.text();
                 console.error("Error creating movie:", errorMessage);

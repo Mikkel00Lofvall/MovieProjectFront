@@ -67,10 +67,29 @@ const AdminSchedulePage = () => {
     };
 
     
+    const NavigateToHome = () => {
+        navigate("/")
+    }
 
     useEffect(() => {
-        FetchScheduleByID();
-    }, [id])
+        const checkAuth = async () => {
+            try {
+                let response = await fetch('https://localhost:7296/api/Account/CheckAuth', {
+                    method: 'POST',
+                    credentials: 'include',
+                });
+        
+                if (!response.ok) {
+                    NavigateToHome()
+                } 
+            } catch (error) {
+                return false;
+            }
+
+            FetchScheduleByID();
+        }
+        checkAuth();
+    }, [id]);
 
     if (LoadingFetchedScheduleData) {
         return (
