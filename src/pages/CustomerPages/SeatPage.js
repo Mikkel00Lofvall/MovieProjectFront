@@ -6,10 +6,11 @@ import ToastManager from '../../components/toast/toastManager.js';
 import PopupPage from '../../components/popup.js';
 import Breakline from '../../components/breakline.js';
 import TestData from "../../global/testdata.js"
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 const SeatPage = () => {
-    let calculatedPrice = 100;
-      
+    let calculatedPrice = 15;
+    const navigate = useNavigate();
 
     let [DecryptedImageData, SetDecryptedImageData] = useState(null);
     let { scheduleID } = useParams();
@@ -58,42 +59,43 @@ const SeatPage = () => {
     */
     /////////////////////////////////////////////////////////////////
 
+    const FetchScheduleAndMovieByID = async (id) => {
+        try {
+            let response = await fetch(`https://localhost:7296/api/Schedule/GetMovieAndScheduleByID/${id}`);
+            if (!response.ok) {
+                console.log("Network was not okay!");
+            }
+            let result = await response.json();
+            console.log("Data:", result);
+            SetDecryptedImageData(Base64ToURL(result.movie.frontPageImage.data)) 
+            setData(result);
+
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoadingData(false);
+        }
+    };
+
+    const FetchTickets = async (id) => {
+        try {
+            let response = await fetch(`https://localhost:7296/api/Ticket/GetTicketWithScheduleID/${id}`);
+            if (!response.ok) {
+                console.log("Network was not okay!");
+            }
+            let result = await response.json();
+            console.log("Tickets:", result);
+            setTickets(result);
+
+        } catch (err) {
+            console.log(err)
+        } finally {
+            setLoadingTickets(false);
+        }
+    };
     
     useEffect(() => {
-        const FetchScheduleAndMovieByID = async (id) => {
-            try {
-                let response = await fetch(`https://localhost:7296/api/Schedule/GetMovieAndScheduleByID/${id}`);
-                if (!response.ok) {
-                    console.log("Network was not okay!");
-                }
-                let result = await response.json();
-                console.log("Data:", result);
-                SetDecryptedImageData(Base64ToURL(result.movie.frontPageImage.data)) 
-                setData(result);
 
-            } catch (err) {
-                console.log(err)
-            } finally {
-                setLoadingData(false);
-            }
-        };
-
-        const FetchTickets= async (id) => {
-            try {
-                let response = await fetch(`https://localhost:7296/api/Ticket/GetTicketWithScheduleID/${id}`);
-                if (!response.ok) {
-                    console.log("Network was not okay!");
-                }
-                let result = await response.json();
-                console.log("Tickets:", result);
-                setTickets(result);
-
-            } catch (err) {
-                console.log(err)
-            } finally {
-                setLoadingTickets(false);
-            }
-        };
 
         FetchTickets(scheduleID);
         FetchScheduleAndMovieByID(scheduleID);
@@ -119,39 +121,39 @@ const SeatPage = () => {
         ) 
         {
             selectedSeatIds.forEach(function(seatid) {
-                let newTicketData = {
-                    scheduleID: FetchedData.schedule.id,
-                    seatID: seatid,
-                    dateID: FetchedData.schedule.date.id,
-                    email: emailInput,
-                    phoneNumber: phoneInput
-                }
-    
-                let userAction = async () => {
-                    let response = await fetch("https://localhost:7296/api/Ticket/Create", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(newTicketData)
-                    });
-                    
-                    if (response.ok) {
-                        console.log("");
-                        window.addToast(`Ticket Booked successfully`, "success", 4000)
-    
+                try {
+                    let newTicketData = {
+                        scheduleID: FetchedData.schedule.id,
+                        seatID: seatid,
+                        dateID: FetchedData.schedule.date.id,
+                        email: emailInput,
+                        phoneNumber: phoneInput
+                    }
+        
+                    let userAction = async () => {
+                        let response = await fetch("https://localhost:7296/api/Ticket/Create", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(newTicketData)
+                        });
                         
-                        
-                    } else {
-                        let errorMessage = await response.text();
-                        window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+                        if (response.ok) {
+                            console.log("");
+                            window.addToast(`Ticket Booked successfully`, "success", 4000)
+                        }
+        
                         
                     }
-    
-                    
+        
+                    userAction()        
                 }
-    
-                userAction()
+
+                catch(err) {
+                    window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
+                }
+
             })
         }
     }
@@ -264,6 +266,9 @@ const SeatPage = () => {
         </div>
     ));
 
+    const toastStyle = {
+        flexDirection: (FetchedData.schedule.seats.length) > 64 ? 'column' : 'row', 
+    };
 
     return (
       
@@ -308,7 +313,7 @@ const SeatPage = () => {
                                 <input type='number' onChange={(e) => {setPhoneInput(e.target.value)}}></input>
                             </div>
                             <Breakline></Breakline>
-                            <h3>Price: {selectedAmountOfTickets*15} $</h3>
+                            <h3>Price: {selectedAmountOfTickets*calculatedPrice} $</h3>
                             <div className='page-pay-information-child-container'>
                                 <label>Card Number:</label>
                                 <input type='number' onChange={(e) => {setCardInput(e.target.value)}}></input>
@@ -335,20 +340,41 @@ const SeatPage = () => {
             </PopupPage>
         )}
         <ToastManager></ToastManager>
-        <div className='page-seat-flex-box'>
+        <div className='page-seat-flex-box' style={toastStyle}>
             <div className='page-seat-details-container'>
                 <section className='page-seat-movie-detail-container'>
                     <img className="page-seat-moive-image" src={DecryptedImageData} alt={FetchedData.movie.name}/>
-                    <h3 className="">{FetchedData.movie.name}</h3>
+                    <div className='page-seat-movie-detail-sub-container'>
+                        <h2 className="">{FetchedData.movie.name}</h2>
+                        <Breakline></Breakline>
+                        <section className='page-seat-sub-detail-flex'>
+                            <div className='page-seat-sub-detail-flex-item'>
+                                <div className="page-seat-schedule-details-grid-item">
+                                    <label>Scheduled Time:</label>
+                                    <label>
+                                        {FetchedData.schedule.date.hour < 10 ? '0' + FetchedData.schedule.date.hour : FetchedData.schedule.date.hour}:
+                                        {FetchedData.schedule.date.minute < 10 ? '0' + FetchedData.schedule.date.minute : FetchedData.schedule.date.minute}
+                                    </label>
+                                </div>
+                                
+                                <div className="page-seat-schedule-details-grid-item">
+                                    <label>Scheduled Date:</label>
+                                    <label>{FetchedData.schedule.date.day} / {FetchedData.schedule.date.month} / {FetchedData.schedule.date.year}</label>
+                                </div>
+                                <section className='page-seat-selector-container'>
+                                    <h3>Select Seat Amount</h3>
+                                    <input type="number" value={selectedAmountOfTickets} onChange={(e) => handleTicketInputAmountChange(e)}></input>
+                                    <br></br>
+                                    <label className='page-seat-ticket-amount-error' style={{color: 'red'}}>{ticketMissMatchError}</label>
+                                    <h3>Price: {calculatedPrice*selectedAmountOfTickets} $</h3>
+                                    <button onClick={() => {setIsPaySiteOpen(!isPaySiteOpen)}} className='page-seat-open-pay-button'>Get Ticket</button>
+                                </section>
+                                
+                            </div>
+                        </section>
+                    </div>
                 </section>
-                <section className='page-seat-selector-container'>
-                    <h3>Select Seat Amount</h3>
-                    <input type="number" value={selectedAmountOfTickets} onChange={(e) => handleTicketInputAmountChange(e)}></input>
-                    <br></br>
-                    <label className='page-seat-ticket-amount-error' style={{color: 'red'}}>{ticketMissMatchError}</label>
-                    <h3>Price: {calculatedPrice}</h3>
-                </section>
-                <button onClick={() => {setIsPaySiteOpen(!isPaySiteOpen)}}>Get Ticket</button>
+
             </div>
 
             <section className='page-seat-container'>

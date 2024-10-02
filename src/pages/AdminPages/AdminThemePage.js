@@ -29,15 +29,12 @@ const AdminThemesPage = () => {
                 });
 
                 if (!response.ok) {
-                    let errorMessage = await response.text();
-                    window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+                    window.addToast(`Failed due to server error \n Error message: ${response.status}`, "error", 4000)
                     return
                 }
 
             } catch (err) {
-                let errorMessage = await err.text();
-                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
-                console.log(err)
+                window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
             } finally {
                 setLoading(false);
                 window.addToast("Theme Was Created", "success", 4000)

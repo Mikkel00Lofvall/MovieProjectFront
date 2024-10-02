@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useState, useEffect, useRef } from 'react';
 import "../css/toast.css";
 
 const Toast = ({ message, type, duration, buttons, onClose }) => {
     const [isVisible, setVisible] = useState(true);
     let [buttonIndex, setButtonIndex] = useState(0);
+
+    const [height, setHeight] = useState('150px');
+    const messageRef = useRef(null);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -13,6 +17,14 @@ const Toast = ({ message, type, duration, buttons, onClose }) => {
 
         return () => clearTimeout(timer);
     }, [duration, onClose]);
+
+    useEffect(() => {
+        if (messageRef.current) {
+            const messageHeight = messageRef.current.offsetHeight;
+            const baseHeight = type === 'warning' ? 50 : 30;
+            setHeight(`${messageHeight + baseHeight}px`);
+        }
+    }, [message, type]);
 
     const handleButtonClick = (action) => {
         action();
@@ -46,26 +58,25 @@ const Toast = ({ message, type, duration, buttons, onClose }) => {
                         <i className="bi bi-check-circle-fill toast-icon" style={{ color: "#00c62e" }}></i>
                     )}
                 </div>
-                <section className='toast-detail-container'>
+                <section className='toast-detail-container' ref={messageRef}>
                     {message}
                 </section>
             </div>
             {buttons && buttons.length > 0 && type === "warning" && (
-                    <div className="toast-button-container">
-                        {buttons.map((button, index) => {
-                            return (
-                                <button
-                                    key={index}
-                                    onClick={() => handleButtonClick(button.action)}
-                                    className={index === 0 ? 'toast-button toast-button-yes' : 'toast-button toast-button-no'}
-                                >
-                                    {button.label}
-                                </button>
-                             );
-                        })}
-                    </div>
-                )}
-
+                <div className="toast-button-container">
+                    {buttons.map((button, index) => {
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => handleButtonClick(button.action)}
+                                className={index === 0 ? 'toast-button toast-button-yes' : 'toast-button toast-button-no'}
+                            >
+                                {button.label}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 };

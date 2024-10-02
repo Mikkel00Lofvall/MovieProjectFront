@@ -3,13 +3,10 @@
 .page-seat-frame {
     padding: 100px 20px 0px 20px;
     overflow: auto;
-    height: 100vh;
-    overflow: hidden;
 }
 
 .page-seat-flex-box {
     display: flex;
-    flex-direction: row;
     justify-content: space-around;
     gap:100px;
 }
@@ -19,14 +16,17 @@
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    max-width: 400px;
+    max-width: 700px;
     max-height: 400px;   
+    gap: 20px;
 }
 
 .page-seat-movie-detail-container {
     padding: var(--padding);
     margin: var(--margin);
-
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 
 }
 
@@ -35,14 +35,74 @@
     height: auto;
     transition: opacity 0.3s ease;
     object-fit: cover;
+    background-color: var(--color-black);
+}
+
+.page-seat-movie-detail-sub-container {
+    width: 50%;
+}
+
+.page-seat-sub-detail-flex {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.page-seat-sub-detail-flex-item {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
+    font-size: large;
+}
+
+.page-seat-schedule-details-grid-item {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }
 
 .page-seat-selector-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    margin:var(--margin);
     padding: var(--padding);
     flex: 8;
     box-shadow: 0px 0px 10px 10px var(--color-black);
+}
+
+.page-seat-selector-container input {
+    padding: 10px;
+    height: 20px;
+    width: 60%;
+    border-radius: 10px;
+    background-color: var(--color-black);
+    color:var(--text-color);
+}
+
+.page-seat-selector-container input:hover {
+    cursor: pointer;
+    background-color: rgb(30, 30, 30);
+}
+
+
+.page-seat-open-pay-button {
+    border:none;
+    border-radius: 10px;
+    height: 40px;
+    background-color: var(--color-light-red);
+    width: 80%;
+    color:var(--text-color);
+    font-size: large;
+}
+
+.page-seat-open-pay-button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+
 }
 
 .page-seat-container {
@@ -115,6 +175,8 @@
 .page-pay-moive-image {
     width: 100px;
     height: auto;
+    object-fit: contain;
+    background-color: var(--color-black);
 }
 
 .page-pay-movie-header-container {

@@ -35,8 +35,7 @@ const AdminSchedulePage = () => {
             setFetchedScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            let errorMessage = await err.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
             setLoadingFetchedScheduleData(false);
         }
@@ -44,25 +43,27 @@ const AdminSchedulePage = () => {
 
 
     const DeleteSchedule = async (scheduleID) => {
-        let response = await fetch(`https://localhost:7296/api/Schedule/DeleteSchedule/${scheduleID}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    
-        if (!response.ok) {
-            let errorMessage = await response.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+        try {
+            let response = await fetch(`https://localhost:7296/api/Schedule/DeleteSchedule/${scheduleID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        
+        
+            if (response.headers.get('Content-Type')?.includes('application/json')) {
+                window.addToast(`Deleted Schedule Successfully`, "success", 4000)
+                handleRedirect("/admin");
+            } else {
+                window.addToast(`Deleted Schedule Successfully`, "success", 4000)
+                handleRedirect("/admin");
+            }
         }
-    
-        if (response.headers.get('Content-Type')?.includes('application/json')) {
-            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
-            handleRedirect("/admin");
-        } else {
-            window.addToast(`Deleted Schedule Successfully`, "success", 4000)
-            handleRedirect("/admin");
+        catch(err) {
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         }
+
 
     };
 

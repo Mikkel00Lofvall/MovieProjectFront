@@ -26,23 +26,23 @@ const AdminRoomPage = () => {
 
 	const CreateHall = async () => {
         if (inputName != "" && inputRows > 0 && inputSeats > 0) {
-            let response = await fetch("https://localhost:7296/api/CinemaHall/CreateHall", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({name: inputName, rowAmount: inputRows, seatsOnARow: inputSeats})
-            });
-            
-            if (response.ok) {
-                window.addToast(`Room Created Successfully`, "success", 4000)
-                GetCinemaHalls();
-  
-            } else {
-                let errorMessage = await response.text();
-                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
-                
-            }
+			try {
+				let response = await fetch("https://localhost:7296/api/CinemaHall/CreateHall", {
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({name: inputName, rowAmount: inputRows, seatsOnARow: inputSeats})
+				});
+				
+				if (response.ok) {
+					window.addToast(`Room Created Successfully`, "success", 4000)
+					GetCinemaHalls();
+				}
+			}
+			catch (err) {
+				window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
+			}
         }
     }
 
@@ -55,8 +55,7 @@ const AdminRoomPage = () => {
         });
     
         if (!response.ok) {
-            let errorMessage = await response.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+			window.addToast(`Failed due to server error \n Error message: ${response.status}`, "error", 4000)
         }
     
         if (response.headers.get('Content-Type')?.includes('application/json')) {
@@ -80,8 +79,7 @@ const AdminRoomPage = () => {
             setCinemaHalls(result)
             console.log("Fetched Halls Data: ", result)
         } catch (err) {
-			let errorMessage = await err.text();
-			window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+			window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
             setLoadingFetchAllHalls(false)
         }
@@ -115,6 +113,7 @@ const AdminRoomPage = () => {
 	if (LoadingFetchAllHalls) {
 		return (
 			<div className="page-admin-frame">
+				<ToastManager></ToastManager>
 				<h2>Loading</h2>
 			</div>
 		);
@@ -127,7 +126,7 @@ const AdminRoomPage = () => {
 					<section>
 						<h2>{hall.name}</h2>
 						<br></br>
-						<label>Size: {hall.seatsOnRow} x {hall.rowsOfSeats} Seats</label>
+						<label>Size: {hall.seatsOnRow} x {hall.rowsOfSeat} Seats</label>
 					</section>
 					<section className="page-admin-hall-button-bundle">
 						<button>See Schedules</button>

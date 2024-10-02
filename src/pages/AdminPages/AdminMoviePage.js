@@ -108,8 +108,7 @@ const AdminMoviePage = () => {
             setCinemaHalls(result)
             console.log(result)
         } catch (err) {
-            let errorMessage = await err.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
             setLoadingHalls(false)
         }
@@ -162,8 +161,7 @@ const AdminMoviePage = () => {
             setFetchedThemes(result);
             console.log("Theme Data:", result);
         } catch (err) {
-            let errorMessage = await err.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
             setLoadingThemes(false);
         }
@@ -184,8 +182,7 @@ const AdminMoviePage = () => {
             setCheckedThemeIds(themeIds);
             console.log("Movie Theme Data:", themeIds);
         } catch (err) {
-            let errorMessage = await err.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
             setLoading(false);
         }
@@ -243,28 +240,24 @@ const AdminMoviePage = () => {
             }
 
             let userAction = async () => {
-                let response = await fetch("https://localhost:7296/api/Movie/CreateMovie", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(newMovieData)
-                });
-                
-                if (response.ok) {
-                    console.log("");
-                    window.addToast(`Movie created successfully`, "success", 4000)
-                    GetMovies();
-
+                try {
+                    let response = await fetch("https://localhost:7296/api/Movie/CreateMovie", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newMovieData)
+                    });
                     
-                    
-                } else {
-                    let errorMessage = await response.text();
-                    window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
-                    
+                    if (response.ok) {
+                        console.log("");
+                        window.addToast(`Movie created successfully`, "success", 4000)
+                        GetMovies();
+                    }
                 }
-
-                
+                catch(err) {
+                    window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
+                }    
             }
 
             userAction()
@@ -272,30 +265,34 @@ const AdminMoviePage = () => {
     }
 
     const DeleteMovie = async (movieID) => {
-        let response = await fetch(`https://localhost:7296/api/Movie/DeleteMovie/${movieID}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-    
-        if (!response.ok) {
-            console.log("Network request failed with status:", response.status);
-            let errorMessage = await response.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
-            return;
+        try {
+            let response = await fetch(`https://localhost:7296/api/Movie/DeleteMovie/${movieID}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        
+            if (!response.ok) {
+                console.log("Network request failed with status:", response.status);
+                window.addToast(`Failed due to server error \n Error message: ${response.status}`, "error", 4000)
+                return;
+            }
+        
+            let result;
+            if (response.headers.get('Content-Type')?.includes('application/json')) {
+                result = await response.json();
+                console.log("Theme Data:", result);
+                window.addToast("Movie Was Deleted", "success", 4000)
+               GetMovies();
+            } else {
+                console.log("No JSON response, theme deleted successfully.");
+                window.addToast("Movie Was Deleted", "success", 4000)
+                GetMovies();
+            }
         }
-    
-        let result;
-        if (response.headers.get('Content-Type')?.includes('application/json')) {
-            result = await response.json();
-            console.log("Theme Data:", result);
-            window.addToast("Movie Was Deleted", "success", 4000)
-           GetMovies();
-        } else {
-            console.log("No JSON response, theme deleted successfully.");
-            window.addToast("Movie Was Deleted", "success", 4000)
-            GetMovies();
+        catch(err) {
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         }
 
     };
@@ -347,8 +344,7 @@ const AdminMoviePage = () => {
             setScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            let errorMessage = await err.text();
-            window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
+            window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
             setLoading(false);
         }
@@ -371,22 +367,22 @@ const AdminMoviePage = () => {
     const UpdateMovieWithThemes = async (movieID) => {
         console.log("Selected Themes", checkedThemeIds)
         if (checkedThemeIds.length > 0) {
-            let response = await fetch(`https://localhost:7296/api/Theme/UpdateMovieWithThemes/${movieID}`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({themeIDs: checkedThemeIds})
-            });
-            
-            if (response.ok) {
-                console.log("movie updated themes successfully");
-                window.addToast(`Movie updated with themes successfully`, "success", 4000)
-  
-            } else {
-                let errorMessage = await response.text();
-                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
-                return;
+            try {
+                let response = await fetch(`https://localhost:7296/api/Theme/UpdateMovieWithThemes/${movieID}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({themeIDs: checkedThemeIds})
+                });
+                
+                if (response.ok) {
+                    console.log("movie updated themes successfully");
+                    window.addToast(`Movie updated with themes successfully`, "success", 4000)
+                }
+            }   
+            catch(err) {
+                window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
             }
         }
     }
@@ -395,29 +391,27 @@ const AdminMoviePage = () => {
 
     const CreateSchedule = async (movieID) => {
         if (SelectedHall != null && selectedDate != null && movieID != null) {
-            let response = await fetch(`https://localhost:7296/api/Schedule/CreateSchedule`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    movieId: movieID,
-                    date: selectedDate,
-                    hallId: SelectedHall
-                })
-            });
-            
-            if (response.ok) {
-                window.addToast(`Schedule created successfully`, "success", 4000)
-                FetchSchedulesByMovieID(movieID)
+            try {
+                let response = await fetch(`https://localhost:7296/api/Schedule/CreateSchedule`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        movieId: movieID,
+                        date: selectedDate,
+                        hallId: SelectedHall
+                    })
+                });
                 
-    
-            } else {
-                let errorMessage = await response.text();
-                window.addToast(`Failed due to server error \n Error message: ${errorMessage}`, "error", 4000)
-                
+                if (response.ok) {
+                    window.addToast(`Schedule created successfully`, "success", 4000)
+                    FetchSchedulesByMovieID(movieID) 
+                }
             }
-
+            catch(err) {
+                window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
+            }
         }
 
     }
