@@ -89,3 +89,86 @@
 
 }
 
+
+
+
+.page-pay-container {
+    padding:45px 20px 20px 20px;
+}
+
+.page-pay-flex-box {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+}
+
+.shoppingbag-section {
+    display: flex;
+    border-radius: 10px;
+    background-color: var(--color-black);
+    width: 500px;
+    gap: 20px;
+    box-shadow: 0px 0px 10px 10px var(--color-black);
+}
+
+.page-pay-moive-image {
+    width: 100px;
+    height: auto;
+}
+
+.page-pay-movie-header-container {
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+    color: var(--text-color);
+    
+}
+
+.page-pay-information-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.page-pay-information-child-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.page-pay-information-child-container {
+    font-size: large;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.page-pay-information-container button {
+    border-radius: 10px;
+    height: 40px;
+    background-color: var(--color-light-red);
+    border:none;
+    color:var(--text-color);
+    font-size: large;
+}
+
+.page-pay-information-container button:hover {
+    cursor: pointer;
+    background-color: var(--color-red);
+}
+
+.page-pay-information-child-container input {
+    width: 60%;
+    height: 30px;
+    border-radius: 10px;
+    background-color: var(--color-black);
+    color:var(--text-color);
+    padding: 5px;
+}
+
+.page-pay-information-child-container input:hover {
+    cursor: pointer;
+    background-color: rgb(30, 30, 30);
+}
+

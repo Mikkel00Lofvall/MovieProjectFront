@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import "../../css/CustomerCSS/seat.css";
 import { Base64ToURL } from '../../global/functions';
 import ToastManager from '../../components/toast/toastManager.js';
-
+import PopupPage from '../../components/popup.js';
+import Breakline from '../../components/breakline.js';
 import TestData from "../../global/testdata.js"
 
 const SeatPage = () => {
@@ -16,13 +17,24 @@ const SeatPage = () => {
     let [selectedAmountOfTickets, setAmountOfTickets] = useState(0);
     let [ticketMissMatchError, setMissMatchError] = useState("");
 
+    // Pay Site
+    let [emailInput, setEmailInput] = useState("");
+    let [phoneInput, setPhoneInput] = useState(0);
+    let [cardInput, setCardInput] = useState(0);
+    let [cvvInput, setCVVInput] = useState(0);
+    let [nameOnCardInput, setNameOnCardInput] = useState("");
+    let [expireDateInput, setExpireDateInput] = useState("");
+
     // Fetched Data
     let [FetchedData, setData] = useState([]);  
-    const [FetchedTickets, setTickets] = useState([]);
+    let [FetchedTickets, setTickets] = useState([]);
 
     // Load Dock
     let [loadingData, setLoadingData] = useState(true); 
     let [loadingTickets, setLoadingTickets] = useState(true); 
+
+    // Popup
+    let [isPaySiteOpen, setIsPaySiteOpen] = useState(false);
 
     // FOR TESTING PURPOSE ONLY! ////////////////////////////////////
     
@@ -96,13 +108,23 @@ const SeatPage = () => {
     );
 
     const CreateTicket = () => {
-        if (selectedSeatIds.length > 0) 
+        if (selectedSeatIds.length > 0 &&
+            nameOnCardInput != "" &&
+            cvvInput > 0 &&
+            expireDateInput != "" &&
+            cardInput > 0 &&
+            emailInput != "" &&
+            phoneInput > 0
+
+        ) 
         {
             selectedSeatIds.forEach(function(seatid) {
                 let newTicketData = {
                     scheduleID: FetchedData.schedule.id,
                     seatID: seatid,
-                    dateID: FetchedData.schedule.date.id
+                    dateID: FetchedData.schedule.date.id,
+                    email: emailInput,
+                    phoneNumber: phoneInput
                 }
     
                 let userAction = async () => {
@@ -246,6 +268,72 @@ const SeatPage = () => {
     return (
       
       <div className='page-seat-frame'>
+        {isPaySiteOpen && (
+            <PopupPage isCloseButtonIcon={true} onClose={() => {
+                    setIsPaySiteOpen(false);
+                }}>
+                <main className="page-pay-container">
+                    <div className='page-pay-flex-box'>
+                        <section className='shoppingbag-section'>
+                            <img className="page-pay-moive-image" src={DecryptedImageData} alt={FetchedData.movie.name}/>
+                            <div className="page-pay-movie-header-container">
+                                <div className='page-admin-schedule-details-grid-item'>
+                                    <h2>{FetchedData.movie.name}</h2>
+                                </div>
+
+                                <div className="page-admin-schedule-details-grid-item">
+                                    <label>Scheduled Date:</label>
+                                    <label>{FetchedData.schedule.date.day} / {FetchedData.schedule.date.month} / {FetchedData.schedule.date.year}</label>
+                                </div>
+                                <div className="page-admin-schedule-details-grid-item">
+                                    <label>Scheduled Time:</label>
+                                    
+                                    <label>
+                                        {FetchedData.schedule.date.hour < 10 ? '0' + FetchedData.schedule.date.hour : FetchedData.schedule.date.hour}:
+                                        {FetchedData.schedule.date.minute < 10 ? '0' + FetchedData.schedule.date.minute : FetchedData.schedule.date.minute}
+                                    </label>
+                                </div>
+                                <div className='page-admin-schedule-details-grid-item'>
+                                    <label>Tickets Amount: {selectedAmountOfTickets}</label>
+                                </div>
+                            </div>
+                        </section>
+                        <section className='page-pay-information-container'>
+                            <div className='page-pay-information-child-container'>
+                                <label>Email:</label>
+                                <input type='text' onChange={(e) => {setEmailInput(e.target.value)}}></input>
+                            </div>
+                            <div className='page-pay-information-child-container'>
+                                <label>Phone:</label>
+                                <input type='number' onChange={(e) => {setPhoneInput(e.target.value)}}></input>
+                            </div>
+                            <Breakline></Breakline>
+                            <h3>Price: {selectedAmountOfTickets*15} $</h3>
+                            <div className='page-pay-information-child-container'>
+                                <label>Card Number:</label>
+                                <input type='number' onChange={(e) => {setCardInput(e.target.value)}}></input>
+                            </div>
+                            <div className='page-pay-information-child-container'>
+                                <label>CVV / CVC / CSV:</label>
+                                <input type='number' onChange={(e) => {setCVVInput(e.target.value)}}></input>
+                            </div>
+                            <div className='page-pay-information-child-container'>
+                                <label>Name On Card:</label>
+                                <input type='text' onChange={(e) => {setNameOnCardInput(e.target.value)}}></input>
+                            </div>
+                            <div className='page-pay-information-child-container'>
+                                <label>Expire Date:</label>
+                                <input type='date' onChange={(e) => {setExpireDateInput(e.target.value)}}></input>
+                            </div>
+
+                            <button onClick={() => {
+                                CreateTicket()
+                            }}>Buy</button>
+                        </section>
+                    </div>
+                </main>
+            </PopupPage>
+        )}
         <ToastManager></ToastManager>
         <div className='page-seat-flex-box'>
             <div className='page-seat-details-container'>
@@ -260,7 +348,7 @@ const SeatPage = () => {
                     <label className='page-seat-ticket-amount-error' style={{color: 'red'}}>{ticketMissMatchError}</label>
                     <h3>Price: {calculatedPrice}</h3>
                 </section>
-                <button onClick={CreateTicket}>Get Ticket</button>
+                <button onClick={() => {setIsPaySiteOpen(!isPaySiteOpen)}}>Get Ticket</button>
             </div>
 
             <section className='page-seat-container'>
