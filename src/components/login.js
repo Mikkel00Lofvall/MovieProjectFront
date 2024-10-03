@@ -86,7 +86,7 @@ const LoginComponent = () => {
             </div>
             <div className="login-flex-container">
                 <section className="login-input-container">
-                    <label>Email:</label>
+                    <label>Username:</label>
                     <input onChange={(e) => {
                         setEmail(e.target.value)
                         console.log("Email: ", emailVar)

@@ -123,12 +123,11 @@ const AdminRoomPage = () => {
 			<div className="page-admin-hall-container">
 				<section className="page-admin-hall-details">
 					<section>
-						<h2>{hall.name}</h2>
+						<h3>{hall.name}</h3>
 						<br></br>
 						<label>Size: {hall.seatsOnRow} x {hall.rowsOfSeat} Seats</label>
 					</section>
 					<section className="page-admin-hall-button-bundle">
-						<button>See Schedules</button>
 						<button onClick={() => {
 							const buttons = [
 								{
