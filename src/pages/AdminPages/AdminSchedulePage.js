@@ -94,8 +94,8 @@ const AdminSchedulePage = () => {
 
     if (LoadingFetchedScheduleData) {
         return (
-            <div className="page-admin-frame">
-                <label>Loading</label>
+            <div className="page-admin--loading-frame">
+                <h2>Loading Data</h2>
             </div>
         );
     }

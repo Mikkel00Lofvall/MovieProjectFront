@@ -36,6 +36,9 @@ const AdminMenu = () => {
                     <li>
                         <a href="/admin/themes">Themes Panel</a>
                     </li>
+                    <li>
+                        <a href="/admin/users">Users Panel</a>
+                    </li>
                 </ul>
             </div>
         </div>

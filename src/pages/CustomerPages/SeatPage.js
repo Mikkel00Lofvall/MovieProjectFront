@@ -12,6 +12,8 @@ const SeatPage = () => {
     let calculatedPrice = 15;
     const navigate = useNavigate();
 
+    let [error, setError] = useState({});
+
     let [DecryptedImageData, SetDecryptedImageData] = useState(null);
     let { scheduleID } = useParams();
     let [selectedSeatIds, setSelectedSeatIds] = useState([]);
@@ -63,7 +65,7 @@ const SeatPage = () => {
         try {
             let response = await fetch(`https://localhost:7296/api/Schedule/GetMovieAndScheduleByID/${id}`);
             if (!response.ok) {
-                console.log("Network was not okay!");
+                setError({ result: false, code: response.status });
             }
             let result = await response.json();
             console.log("Data:", result);
@@ -71,7 +73,7 @@ const SeatPage = () => {
             setData(result);
 
         } catch (err) {
-            console.log(err)
+            setError({ result: false, code: "Network Error" });
         } finally {
             setLoadingData(false);
         }
@@ -81,14 +83,14 @@ const SeatPage = () => {
         try {
             let response = await fetch(`https://localhost:7296/api/Ticket/GetTicketWithScheduleID/${id}`);
             if (!response.ok) {
-                console.log("Network was not okay!");
+                setError({ result: false, code: response.status });
             }
             let result = await response.json();
             console.log("Tickets:", result);
             setTickets(result);
 
         } catch (err) {
-            console.log(err)
+            setError({ result: false, code: "Network Error" });
         } finally {
             setLoadingTickets(false);
         }
@@ -101,7 +103,9 @@ const SeatPage = () => {
         FetchScheduleAndMovieByID(scheduleID);
      }, [scheduleID])
 
-
+    if (error.result == false) {
+        navigate(`/error/${error.code}`)
+    }
 
     if (loadingData || loadingTickets) return (
         <div className="page-seat-frame">

@@ -196,15 +196,9 @@ const AdminMoviePage = () => {
 
 
     if (LoadingCinemaHalls || LoadingMovies || LoadingThemes) {
-        console.log("--------- Load Dock ---------");
-        console.log(" Halls: ", LoadingCinemaHalls);
-        console.log(" Movies: ", LoadingMovies);
-        console.log(" Themes: ", LoadingThemes);
-        console.log("--------- Load Dock ---------");
-
         return (
-            <div className="page-admin-frame">
-                <label>Loading</label>
+            <div className="page-admin--loading-frame">
+                <h2>Loading Data</h2>
             </div>
         );
     }

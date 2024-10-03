@@ -111,12 +111,11 @@ const AdminRoomPage = () => {
     }, []);
 
 	if (LoadingFetchAllHalls) {
-		return (
-			<div className="page-admin-frame">
-				<ToastManager></ToastManager>
-				<h2>Loading</h2>
-			</div>
-		);
+        return (
+            <div className="page-admin--loading-frame">
+                <h2>Loading Data</h2>
+            </div>
+        );
 	}
 
 	const HallsList = CinemaHalls.map(hall => {

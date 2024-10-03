@@ -5,7 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Base64ToURL } from "../../global/functions.js"
 import PopupPage from "../../components/popup";
 import TicketPage from "../CustomerPages/TicketPage";
-import Cookies from 'js-cookie';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
     let [loading, setLoading] = useState(true); 
@@ -14,22 +14,19 @@ const HomePage = () => {
     let [selectedMovieID, setSelectedMovieID] = useState(0);
     let [scheduleData, setScheduleData] = useState([]);
     const [isScheduleOpen, setIsScheduleOpen] = useState(false);
-    
-    const checkAuthStatus = () => {
-        const token = Cookies.get('MovieProjectCookie');
-        console.log("Cookie Value: ", !!token)
-    };
 
-    useEffect(() => {
-        checkAuthStatus();
-    }, []);
+    const navigate = useNavigate();
+    
+    const [error, setError] = useState({});
+
+    const MovieContainerRef = React.useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 let response = await fetch(`https://localhost:7296/api/Movie/GetMovies`);
-                if (!response) {
-                    console.log("Network was not ok!")
+                if (!response.ok) {
+                    setError({ result: false, code: response.status });
                 }
                 let result = await response.json()
                 for (let i = 0; i < result.length; i++) {
@@ -39,7 +36,7 @@ const HomePage = () => {
                 setData(result)
                 console.log(result)
             } catch (err) {
-                console.log(err)
+                setError({ result: false, code: "Network Error" });
             } finally {
                 setLoading(false)
             }
@@ -48,14 +45,21 @@ const HomePage = () => {
         fetchData();
     }, []);
 
-    const MovieContainerRef = React.useRef(null);
+    if (error.result == false) {
+        navigate(`/error/${error.code}`)
+    }
+
+    if (loading) {
+        navigate("/error")
+    }
+
+
 
     const FetchSchedulesByMovieID = async (movieID) => {
         try {
             let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${movieID}`);
             if (!response.ok) {
-                console.log("Network was not okay!")
-                return
+                setError({ result: false, code: response.status });
             }
 
             if (response == "No Schedules for this movie!") {
@@ -66,7 +70,7 @@ const HomePage = () => {
             setScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            console.log(err)
+            setError({ result: false, code: "Network Error" });
         } finally {
             setLoading(false);
         }
@@ -120,6 +124,10 @@ const HomePage = () => {
             </section>
         );
     });
+
+    if (error.result == false) {
+        navigate(`/error/${error.code}`)
+    }
 
     if (loading) return (
         <div className="page-home-frame">

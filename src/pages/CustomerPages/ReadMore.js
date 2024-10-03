@@ -7,12 +7,13 @@ import Breakline from "../../components/breakline"
 import PopupPage from '../../components/popup';
 import { Base64ToURL } from '../../global/functions';
 import TicketPage from '../CustomerPages/TicketPage';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 const ReadMorePage = () => {
     let { id } = useParams();
     let [scheduleData, setScheduleData] = useState([]);
     let [movie, setData] = useState(null);
-    let [error, setError] = useState(null);
+    let [error, setError] = useState({});
 
     let [isPopupOpen, setIsPopupOpen] = useState(false); 
     let FetchedSchedule = useRef(false);
@@ -26,6 +27,8 @@ const ReadMorePage = () => {
     let [LoadingSchedules, setLoadingSchedules] = useState(true);
     let [LoadingThemes, setLoadingThemes] = useState(true);
     let [LoadingMovie, setLoadingMovie] = useState(true);
+
+    const navigate = useNavigate();
 
     const ScrollLeft = () => {
         setCurrentIndex((prevIndex) => (prevIndex === 0 ? ImagesForMovie.length - 1  : prevIndex - 1));
@@ -48,8 +51,7 @@ const ReadMorePage = () => {
         try {
             let response = await fetch(`https://localhost:7296/api/Theme/GetThemesWithMovieID/${id}`);
             if (!response.ok) {
-                console.log("Network was not okay!")
-                return
+                setError({ result: false, code: response.status });
             }
 
             let result = await response.json();
@@ -57,7 +59,7 @@ const ReadMorePage = () => {
             setFetchedThemesForMovie(result);
             console.log("Movie Theme Data:", result);
         } catch (err) {
-            console.log(err)
+            setError({ result: false, code: "Network Error" });
         } finally {
             setLoadingThemes(false);
         }
@@ -73,8 +75,8 @@ const ReadMorePage = () => {
     const fetchData = async () => {
         try {
             let response = await fetch(`https://localhost:7296/api/Movie/GetMovieWithId/${id}`);
-            if (!response) {
-                throw new Error("Network was not okay!")
+            if (!response.ok) {
+                setError({ result: false, code: response.status });
             }
             let result = await response.json()
             for (let i = 0; i < result.imagesBlobs.length; i++) {
@@ -84,7 +86,7 @@ const ReadMorePage = () => {
             setImagesAmount(result.imagesBlobs)
             console.log("Movie Data: ", result)
         } catch (err) {
-            setError(err.message)
+            setError({ result: false, code: "Network Error" });
         } finally {
             setLoadingMovie(false)
         }
@@ -110,23 +112,21 @@ const ReadMorePage = () => {
         try {
             let response = await fetch(`https://localhost:7296/api/Schedule/GetSchedulesWithMovieID/${id}`);
             if (!response.ok) {
-                console.log("Network was not okay!")
+                setError({ result: false, code: response.status });
             }
             let result = await response.json();
             setScheduleData(result);
             console.log("Schedule Data:", result);
         } catch (err) {
-            console.log(err)
+            setError({ result: false, code: "Network Error" });
         } finally {
             setLoadingSchedules(false);
         }
     };
 
-    if (error) return (        
-        <div className="page-read-more-frame">
-            <h2>Error</h2>
-        </div>
-    );
+    if (error.result == false) {
+        navigate(`/error/${error.code}`)
+    }
 
     if (LoadingMovie || LoadingThemes) {
         console.log("------------- Load Dock -------------");

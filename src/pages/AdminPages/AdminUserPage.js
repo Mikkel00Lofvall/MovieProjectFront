@@ -7,50 +7,52 @@ import ToastManager from "../../components/toast/toastManager";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 
-const AdminThemesPage = () => {
+const AdminUserPage = () => {
     let [FetchedThemes, setFetchedThemes] = useState([]);
 
-    let [inputThemeName, setThemeNameInput] = useState("");
+    let [inputName, setNameInput] = useState("");
+    let [inputPassword, setPasswordInput] = useState("");
 
     const [isCreatePopupOpen, setCreatePopup] = useState(false)
 
 
     // Load Dock 
-    let [loadingThemes, setLoadingThemes] = useState(true);
+    let [loadingUsers, setLoadingUsers] = useState(true);
 
-    const CreateTheme = async () => {
-        if (inputThemeName != "") {
+    const CreateUser = async () => {
+        if (inputName != "" && inputPassword != "") {
             try {
-                let response = await fetch(`https://localhost:7296/api/Theme/CreateTheme`, {
+                let response = await fetch(`https://localhost:7296/api/Account/Create`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        name: inputThemeName
+                        username: inputName,
+                        password: inputPassword
                     })
                 });
 
                 if (!response.ok) {
                     window.addToast(`Failed due to server error \n Error message: ${response.status}`, "error", 4000)
-                    return
+                }
+
+                if (response.ok) {
+                    window.addToast("User Was Created", "success", 4000)
+                    FetchAllUser();
                 }
 
             } catch (err) {
                 window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
-            } finally {
-                window.addToast("Theme Was Created", "success", 4000)
-                FetchAllThemes();
-
             }
         }
 
     };
 
 
-    const FetchAllThemes = async () => {
+    const FetchAllUser = async () => {
         try {
-            let response = await fetch('https://localhost:7296/api/Theme/GetThemes');
+            let response = await fetch('https://localhost:7296/api/Account/GetAll');
             if (!response.ok) {
                 console.log("Network was not okay!")
                 return
@@ -59,17 +61,17 @@ const AdminThemesPage = () => {
             let result = await response.json();
 
             setFetchedThemes(result);
-            console.log("Theme Data:", result);
+            console.log("Admin Data:", result);
         } catch (err) {
             window.addToast(`Failed due to server error \n Error message: ${err}`, "error", 4000)
         } finally {
-            setLoadingThemes(false);
+            setLoadingUsers(false)
         }
 
     };
 
-    const DeleteTheme = async (themeID) => {
-        let response = await fetch(`https://localhost:7296/api/Theme/DeleteTheme/${themeID}`, {
+    const DeleteUser = async (userID) => {
+        let response = await fetch(`https://localhost:7296/api/Account/Delete/${userID}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,14 +80,15 @@ const AdminThemesPage = () => {
     
         if (!response.ok) {
             window.addToast(`Failed due to server error \n Error message: ${response.status}`, "error", 4000)
+            return;
         }
     
         if (response.headers.get('Content-Type')?.includes('application/json')) {
-            window.addToast("Theme Was Deleted", "success", 4000)
-            FetchAllThemes();
+            window.addToast("User Was Deleted", "success", 4000)
+            FetchAllUser();
         } else {
-            window.addToast("Theme Was Deleted", "success", 4000)
-            FetchAllThemes();
+            window.addToast("User Was Deleted", "success", 4000)
+            FetchAllUser();
         }
 
     };
@@ -111,19 +114,19 @@ const AdminThemesPage = () => {
                 return false;
             }
 
-            FetchAllThemes();
+            FetchAllUser();
         }
         checkAuth();
     }, []);
 
 
-    if (loadingThemes) {
+    if (loadingUsers) {
         return (
             <div className="page-admin--loading-frame">
-                <h2>Loading Data</h2>
+                <h2>Loading</h2>
             </div>
         );
-    };
+    }
 
     return (
       <div className="page-admin-frame">
@@ -135,9 +138,13 @@ const AdminThemesPage = () => {
                 <div className="page-admin-themes-create-container">
                     <section className="page-admin-themes-create-input-container">
                         <label>Name:</label>
-                        <input type="text" onChange={(e) => {setThemeNameInput(e.target.value)}}></input>
+                        <input type="text" onChange={(e) => {setNameInput(e.target.value)}}></input>
                     </section>
-                    <button onClick={CreateTheme}>Create</button>
+                    <section className="page-admin-themes-create-input-container">
+                        <label>Password:</label>
+                        <input type="text" onChange={(e) => {setPasswordInput(e.target.value)}}></input>
+                    </section>
+                    <button onClick={CreateUser}>Create</button>
                 </div>
             </PopupPage>
         )}
@@ -157,17 +164,17 @@ const AdminThemesPage = () => {
         <main className="page-admin-themes-container">
           <div className="show-scrollbar">
             <main className="page-admin-theme-grid-container">
-                {FetchedThemes.map((theme, index) => (
+                {FetchedThemes.map((user, index) => (
                     <div key={index} className="page-admin-theme-grid-item">
                         <div className="page-admin-theme-theme-container">
-                            <label>{theme.name}</label>
+                            <label>{user.username}</label>
                         </div>
                         <div className="page-admin-theme-button-bundle-container" >
                             <button onClick={() => {
                                 const buttons = [
                                     {
                                         label: "Yes",
-                                        action: () => DeleteTheme(theme.id)
+                                        action: () => DeleteUser(user.id)
                                     },
                                     {
                                         label: "No",
@@ -188,4 +195,4 @@ const AdminThemesPage = () => {
     )
   };
   
-  export default AdminThemesPage;
+  export default AdminUserPage;
