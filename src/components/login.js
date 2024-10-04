@@ -89,7 +89,6 @@ const LoginComponent = () => {
                     <label>Username:</label>
                     <input onChange={(e) => {
                         setEmail(e.target.value)
-                        console.log("Email: ", emailVar)
                     }}></input>
                 </section>
                 <section className="login-input-container">
@@ -97,7 +96,6 @@ const LoginComponent = () => {
                     <div className="login-input-password-container">
                     <input type={showPassword} onChange={(e) => {
                         setPassword(e.target.value)
-                        console.log("Password: ", passwordVar)
                     }}/>
                         <button onClick={togglePasswordVisibility}>
                             {showPassword === "password" ? (
